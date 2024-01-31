@@ -26,6 +26,8 @@ export default {
       colors: {
         primaryff: "#ff7200",
         secondaryff: "#febb41",
+        grayLight: "#E7ECF3",
+        placeholderColor: "#84878b",
         fontcolor: "#000000",
         gray7b: "#7b88a8",
         grayf7: "#f7f5f1",
