@@ -12,6 +12,7 @@ import LoginPage from "./pages/LoginPage.jsx";
 import ErrorPage from "./pages/ErrorPage.jsx";
 import MainLayout from "./layouts/MainLayout.jsx";
 import TablePage from "./pages/TablePage.jsx";
+import OrderPage from "./pages/OrderPage.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -28,7 +29,7 @@ const router = createBrowserRouter(
 					{/* <Route path="/menu" element={<MenuPage />}>
 						<Route path="/menu/order/:id" element={<MenuRightContent></MenuRightContent>} />
 					</Route> */}
-					{/* <Route path="/order" element={<OrderPage />}></Route> */}
+					<Route path="/order" element={<OrderPage />}></Route>
 				</Route>
 				{/* <Route element={<ProtectedRoute allowedRoles={[Role.CHEF]} />}>
 					<Route path="/kitchen" element={<KitchenPage />}></Route>
