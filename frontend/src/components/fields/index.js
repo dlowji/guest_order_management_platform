@@ -1,3 +1,3 @@
-import Field from "./Field";
+import FormGroup from "./FormGroup";
 
-export { Field };
+export { FormGroup };

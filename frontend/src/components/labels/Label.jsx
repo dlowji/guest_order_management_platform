@@ -1,10 +1,10 @@
 import React from "react";
 
-const Label = ({ htmlFor = "", children, ...props }) => {
+const Label = ({ htmlFor = "", children, }) => {
   return (
     <label
       htmlFor={htmlFor}
-      className="text-grayDark font-semibold cursor-pointer" {...props}
+      className="inline-block self-start text-lg capitalize-first font-medium cursor-pointer text-gray7b"
     >
       {children}
     </label>
