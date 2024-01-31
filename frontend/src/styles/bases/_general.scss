@@ -1,0 +1,8 @@
+@import "variables";
+
+body {
+	font-size: $fontsize;
+	font-family: $fontfamily;
+	font-weight: $fontweight;
+	line-height: $lineheight;
+}
