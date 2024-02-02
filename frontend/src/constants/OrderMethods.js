@@ -1,4 +1,4 @@
-const ORDER_METHODS = [
+export const ORDER_METHODS = [
   {
     id: "CASH",
     name: "Cash",
@@ -18,5 +18,3 @@ const ORDER_METHODS = [
     isActive: false,
   },
 ];
-
-export default ORDER_METHODS;
