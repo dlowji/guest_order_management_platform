@@ -20,13 +20,14 @@ import OrderDetailProvider from "./context/useOrderDetail";
 import KitchenOrder from "./modules/kitchen/KitchenOrder.jsx";
 import HistoryDetail from "./modules/history/HistoryDetail.jsx";
 import HistoryPage from "./pages/HistoryPage.jsx";
+import DashboardPage from "./pages/DashboardPage.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route errorElement={<ErrorPage />}>
       <Route element={<MainLayout />}>
         <Route /*element={<ProtectedRoute allowedRoles={[Role.ADMIN]} />}*/>
-					{/* <Route path="/home" element={<DashboardPage />}></Route> */}
+					<Route path="/home" element={<DashboardPage />}></Route>
 					<Route path="/history" element={<HistoryPage />}></Route>
 					<Route path="/history/:orderId" element={<HistoryDetail />}></Route>
 				</Route>
