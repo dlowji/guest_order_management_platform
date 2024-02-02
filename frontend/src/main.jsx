@@ -18,16 +18,18 @@ import MenuRightContent from "./modules/common/MenuRightContent.jsx";
 import KitchenPage from "./pages/KitchenPage.jsx";
 import OrderDetailProvider from "./context/useOrderDetail";
 import KitchenOrder from "./modules/kitchen/KitchenOrder.jsx";
+import HistoryDetail from "./modules/history/HistoryDetail.jsx";
+import HistoryPage from "./pages/HistoryPage.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route errorElement={<ErrorPage />}>
       <Route element={<MainLayout />}>
-        {/* <Route element={<ProtectedRoute allowedRoles={[Role.ADMIN]} />}>
-					<Route path="/home" element={<DashboardPage />}></Route>
+        <Route /*element={<ProtectedRoute allowedRoles={[Role.ADMIN]} />}*/>
+					{/* <Route path="/home" element={<DashboardPage />}></Route> */}
 					<Route path="/history" element={<HistoryPage />}></Route>
 					<Route path="/history/:orderId" element={<HistoryDetail />}></Route>
-				</Route> */}
+				</Route>
         <Route /*element={<ProtectedRoute allowedRoles={[Role.ADMIN, Role.EMPLOYEE, Role.CHEF]} />}*/
         >
           {/* <Route path="/" element={<RedirectPage />}></Route> */}

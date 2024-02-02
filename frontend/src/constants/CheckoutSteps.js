@@ -3,7 +3,7 @@ import CheckoutStepOne from "@modules/checkout/CheckoutStepOne";
 import CheckoutStepThree from "@modules/checkout/CheckoutStepThree";
 import CheckoutStepTwo from "@modules/checkout/CheckoutStepTwo";
 
-const checkoutSteps = [
+export const checkoutSteps = [
   {
     id: "step-one",
     title: "Confirm your order",
@@ -30,4 +30,3 @@ const checkoutSteps = [
   },
 ];
 
-export default checkoutSteps;
