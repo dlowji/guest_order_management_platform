@@ -1,65 +1,103 @@
-import { User, Token } from '../../../../models/index.js';
-import { validateLogin } from '../../../validators/user.validator.js';
-import { errorHelper, getText, logger, signAccessToken, signRefreshToken } from '../../../../utils/index.js';
-import bcrypt from 'bcryptjs';
+import { User, Token } from "../../../../models/index.js";
+import { validateLogin } from "../../../validators/user.validator.js";
+import {
+  errorHelper,
+  getText,
+  logger,
+  signAccessToken,
+  signRefreshToken,
+} from "../../../../utils/index.js";
+import bcrypt from "bcryptjs";
 const { compare } = bcrypt;
 
-export default async (req, res) => {
+export const login = async (req, res) => {
   const { error } = validateLogin(req.body);
   if (error) {
-    let code = '00038';
-    if (error.details[0].message.includes('email'))
-      code = '00039';
-    else if (error.details[0].message.includes('password'))
-      code = '00040';
-
-    return res.status(400).json(errorHelper(code, req, error.details[0].message));
+    return res.status(400).json({
+      error: {
+        message: error.details[0].message,
+        field: error.details[0].path[0],
+        code: "INVALID_FORMAT",
+      },
+    });
   }
 
-  const user = await User.findOne({ email: req.body.email, isActivated: true, isVerified: true }).select('+password')
+  const { username, password } = req.body;
+
+  const user = await User.findOne({
+    username,
+    isActivated: true,
+  })
+    .select("+password")
     .catch((err) => {
-      return res.status(500).json(errorHelper('00041', req, err.message));
+      return res.status(500).json({
+        error: {
+          message: "An internal server error occurred, please try again.",
+          code: "INTERNAL_SERVER_ERROR",
+          reason: err.message,
+        },
+      });
     });
 
   if (!user)
-    return res.status(404).json(errorHelper('00042', req));
+    return res.status(404).json({
+      error: {
+        message: "The username or password is incorrect.",
+        code: "INVALID_CREDENTIALS",
+      },
+    });
 
   if (!user.isActivated)
-    return res.status(400).json(errorHelper('00043', req));
-
-  if (!user.isVerified)
-    return res.status(400).json(errorHelper('00044', req));
+    return res.status(400).json({
+      error: {
+        message: "Your account is not activated.",
+        code: "ACCOUNT_NOT_ACTIVATED",
+      },
+    });
 
   const match = await compare(req.body.password, user.password);
   if (!match)
-    return res.status(400).json(errorHelper('00045', req));
+    return res.status(400).json({
+      error: {
+        message: "The username or password is incorrect.",
+        code: "INVALID_CREDENTIALS",
+      },
+    });
 
   const accessToken = signAccessToken(user._id);
   const refreshToken = signRefreshToken(user._id);
   //NOTE: 604800000 ms is equal to 7 days. So, the expiry date of the token is 7 days after.
   const filter = {
     userId: user._id,
-  }
+  };
 
   const update = {
     refreshToken: refreshToken,
     status: true,
     expiresIn: Date.now() + 604800000,
-    createdAt: Date.now()
-  }
+    createdAt: Date.now(),
+  };
 
   await Token.findOneAndUpdate(filter, update, {
     upsert: true,
     new: true,
-  })
-  .catch((err) => {
-    return res.status(500).json(errorHelper('00046', req, err.message));
+  }).catch((err) => {
+    return res.status(500).json({
+      error: {
+        message: "An internal server error occurred, please try again.",
+        code: "INTERNAL_SERVER_ERROR",
+        reason: err.message,
+      },
+    });
   });
 
-  logger('00047', user._id, getText('en', '00047'), 'Info', req);
   return res.status(200).json({
-    resultMessage: { en: getText('en', '00047'), vi: getText('vi', '00047') },
-    resultCode: '00047', user, accessToken, refreshToken
+    result: "You login successfully",
+    code: "SUCCESS",
+    user,
+    accessToken,
+    refreshToken,
+    type: "JWT",
   });
 };
 
