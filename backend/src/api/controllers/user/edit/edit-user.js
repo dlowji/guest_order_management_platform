@@ -12,7 +12,7 @@ const s3 = new S3({
   signatureVersion: 'v4',
 });
 
-export default async (req, res) => {
+export const editUser = async (req, res) => {
   const { error } = validateEditUser(req.body);
   if (error) {
     let code = '00077';

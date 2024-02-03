@@ -4,7 +4,7 @@ import { errorHelper, logger, getText } from '../../../../utils/index.js';
 import bcrypt from 'bcryptjs';
 const { hash, compare } = bcrypt;
 
-export default async (req, res) => {
+export const changePassword =  async (req, res) => {
   const { error } = validateChangePassword(req.body);
   if (error) return res.status(400).json(errorHelper('00069', req, error.details[0].message));
 
