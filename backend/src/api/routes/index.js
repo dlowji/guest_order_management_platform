@@ -15,7 +15,7 @@ router.get(specs, setup(specDoc, { explorer: true }));
 
 router.use("/users", user);
 router.use("/kitchen", kitchen);
-router.use("/table", table);
+router.use("/tables", table);
 // router.use("/orders", order);
 
 export default router;

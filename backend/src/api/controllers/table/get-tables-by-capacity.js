@@ -17,6 +17,7 @@ export const getTablesByCapacity = async (req, res) => {
   return res.status(200).json({
     message: "Tables retrieved by capacity successfully",
     code: "SUCCESS",
+    queryMethod: "BY_CAPACITY",
     capacityQuery: capacityQ,
     data: tables,
   });

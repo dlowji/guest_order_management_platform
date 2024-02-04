@@ -23,6 +23,7 @@ export const getTableById = async (req, res) => {
   return res.status(200).json({
     message: "Table retrieved successfully",
     code: "SUCCESS",
+    queryMethod: "BY_ID",
     data: table,
   });
 };

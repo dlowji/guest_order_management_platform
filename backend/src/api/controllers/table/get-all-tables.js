@@ -14,6 +14,7 @@ export const getAllTables = async (req, res) => {
   return res.status(200).json({
     message: "Tables retrieved successfully",
     code: "SUCCESS",
+    queryMethod: "ALL",
     data: tables,
   });
 };
