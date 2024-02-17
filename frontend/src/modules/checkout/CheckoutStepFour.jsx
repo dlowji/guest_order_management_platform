@@ -1,6 +1,5 @@
-import React from "react";
-
-const CheckoutStepFour = (props) => {
+// import React from "react";
+const CheckoutStepFour = () => {
   return (
     <div className="mx-20 mt-5 flex items-center justify-between gap-10 flex-col">
       <div className="flex flex-col gap-5 w-full justify-center items-center text-xl">

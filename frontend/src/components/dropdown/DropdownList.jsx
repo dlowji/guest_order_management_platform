@@ -1,5 +1,5 @@
-import React from "react";
-
+// import React from "react";
+import PropTypes from "prop-types";
 const DropdownList = ({ children, classNameBody }) => {
   const show = true;
   return (
@@ -13,6 +13,11 @@ const DropdownList = ({ children, classNameBody }) => {
       )}
     </>
   );
+};
+
+DropdownList.propTypes = {
+  children: PropTypes.node,
+  classNameBody: PropTypes.string,
 };
 
 export default DropdownList;

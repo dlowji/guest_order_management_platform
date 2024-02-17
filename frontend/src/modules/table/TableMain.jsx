@@ -1,64 +1,35 @@
-import React from "react";
 import MainContentHeader from "../common/MainContentHeader";
 import CategoriesHeader from "../common/CategoriesHeader";
 import categoriesTableItems from "../../constants/CategoriesTableItems";
 import CircleLoading from "../../components/loadings/CircleLoading";
 import TableList from "./TableList";
 import TableItem from "./TableItem";
-
-const tableItem = [
-  {
-    id: 1,
-    capacity: 4,
-    code: "Table 1",
-    tableStatus: "free",
-    updatedAt: Date.now(),
-  },
-  {
-    id: 2,
-    capacity: 4,
-    code: "Table 2",
-    tableStatus: "occupied",
-    updatedAt: Date.now(),
-  },
-  {
-    id: 3,
-    capacity: 3,
-    code: "Table 3",
-    tableStatus: "check_in",
-    updatedAt: Date.now(),
-  },
-  {
-    id: 4,
-    capacity: 4,
-    code: "Table 4",
-    tableStatus: "free",
-    updatedAt: Date.now(),
-  },
-  {
-    id: 5,
-    capacity: 2,
-    code: "Table 5",
-    tableStatus: "free",
-    updatedAt: Date.now(),
-  },
-  {
-    id: 6,
-    capacity: 2,
-    code: "Table 6",
-    tableStatus: "free",
-    updatedAt: Date.now(),
-  },
-];
-
-const TableMain = (props) => {
-  const isFetching = false;
-  const error = false;
+import { useQuery } from "@tanstack/react-query";
+import useQueryString from "../../utils/queryString";
+import tableApi from "../../api/table";
+import { useEffect, useState } from "react";
+const TableMain = () => {
+  const [tables, setTables] = useState([]);
+  const [isFetching, setIsFetching] = useState(false);
+  const [error, setError] = useState(null);
+  const [query, setQuery] = useState("");
+  useEffect(() => {
+    setIsFetching(true);
+    fetch(`http://localhost:5000/api/tables?statusQ=${query}`)
+      .then((res) => res.json())
+      .then((response) => {
+        if (response.code == "SUCCESS") setTables(response.data);
+        else {
+          setError(response.message);
+        }
+      });
+    setIsFetching(false);
+  }, [query]);
   return (
     <div className="table-left">
       <MainContentHeader
         title="Choose tables"
-        quantity={tableItem?.length ? `${tableItem.length} tables` : "0 tables"}
+        quantity={tables?.length ? `${tables.length} tables` : "0 tables"}
       ></MainContentHeader>
       <CategoriesHeader
         categories={categoriesTableItems}
@@ -70,14 +41,14 @@ const TableMain = (props) => {
             <CircleLoading color="#ff7200"></CircleLoading>
           </div>
         )}
-        {tableItem &&
+        {tables &&
           !isFetching &&
           !error &&
-          tableItem.map((item) => (
+          tables.map((item) => (
             <TableItem
-              key={item.id}
+              key={item._id}
               item={{
-                id: item.id,
+                id: item._id,
                 seats: item.capacity,
                 title: item.code,
                 tableStatus: item.tableStatus.toUpperCase(),

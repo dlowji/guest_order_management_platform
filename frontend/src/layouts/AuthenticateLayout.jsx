@@ -1,7 +1,8 @@
-import React from "react";
+// import React from "react";
 import { Outlet } from "react-router-dom";
+import PropTypes from "prop-types";
 
-const AuthenticateLayout = ({heading, subheading}) => {
+const AuthenticateLayout = ({ heading, subheading }) => {
   return (
     <section className="h-screen mb-10">
       <div className="container px-6 py-12 h-full">
@@ -22,6 +23,11 @@ const AuthenticateLayout = ({heading, subheading}) => {
       </div>
     </section>
   );
+};
+
+AuthenticateLayout.propTypes = {
+  heading: PropTypes.string,
+  subheading: PropTypes.string,
 };
 
 export default AuthenticateLayout;

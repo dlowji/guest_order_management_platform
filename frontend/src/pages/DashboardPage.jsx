@@ -3,11 +3,16 @@ import MainContentHeader from "../modules/common/MainContentHeader";
 import StatisticItems from "../modules/common/StatisticItems";
 import TrendingTable from "../modules/dashboard/TrendingTable";
 import StockOutTable from "../modules/dashboard/StockOutTable";
+import { useQuery } from "@tanstack/react-query";
+import orderAPi from "../api/order";
 
 const DashboardPage = () => {
-  const statisticItems = {
-    data: [],
-  };
+  const { data: statisticItems } = useQuery({
+    queryKey: ["statisticItemsDashboard"],
+    queryFn: () => {
+      return orderApi.getDashboardStatistics();
+    },
+  });
   return (
     <div className="mb-10">
       <MainContentHeader

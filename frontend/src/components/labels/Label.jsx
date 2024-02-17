@@ -1,6 +1,7 @@
-import React from "react";
+// import React from "react";
+import PropTypes from "prop-types";
 
-const Label = ({ htmlFor = "", children, }) => {
+const Label = ({ htmlFor = "", children }) => {
   return (
     <label
       htmlFor={htmlFor}
@@ -9,6 +10,11 @@ const Label = ({ htmlFor = "", children, }) => {
       {children}
     </label>
   );
+};
+
+Label.propTypes = {
+  htmlFor: PropTypes.string,
+  children: PropTypes.node,
 };
 
 export default Label;

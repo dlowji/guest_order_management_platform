@@ -1,6 +1,6 @@
-import React from "react";
 import CircleLoading from "../loadings/CircleLoading";
 import { Link } from "react-router-dom";
+import PropTypes from "prop-types";
 
 const Button = ({
   type,
@@ -40,6 +40,17 @@ const Button = ({
       {child}
     </button>
   );
+};
+
+Button.propTypes = {
+  type: PropTypes.string,
+  className: PropTypes.string,
+  children: PropTypes.node,
+  onClick: PropTypes.func,
+  href: PropTypes.string,
+  isLoading: PropTypes.bool,
+  icon: PropTypes.node,
+  variant: PropTypes.oneOf(["primary", "secondary"]),
 };
 
 export default Button;

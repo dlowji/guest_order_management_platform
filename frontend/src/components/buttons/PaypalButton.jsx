@@ -1,7 +1,7 @@
 import React from "react";
-import { PayPalButtons, usePayPalScriptReducer } from '@paypal/react-paypal-js';
-import { PayPalButtonsComponentOptions } from '@paypal/paypal-js/types';
+import { PayPalButtons, usePayPalScriptReducer } from "@paypal/react-paypal-js";
 import { DotsWaveLoading } from "../loadings";
+import PropTypes from "prop-types";
 
 const PaypalButton = ({
   currency = "USD",
@@ -24,7 +24,7 @@ const PaypalButton = ({
         currency,
       },
     });
-  }, [currency, showSpinner]);
+  }, [currency, dispatch, options, showSpinner]);
   return (
     <div className="relative">
       {isLoading && (
@@ -46,6 +46,17 @@ const PaypalButton = ({
       />
     </div>
   );
+};
+
+PaypalButton.propTypes = {
+  currency: PropTypes.string,
+  showSpinner: PropTypes.bool,
+  style: PropTypes.object,
+  amount: PropTypes.number.isRequired,
+  className: PropTypes.string,
+  createOrder: PropTypes.func.isRequired,
+  onApprove: PropTypes.func.isRequired,
+  onError: PropTypes.func.isRequired,
 };
 
 export default PaypalButton;

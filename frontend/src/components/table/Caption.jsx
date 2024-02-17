@@ -1,4 +1,5 @@
-import React from "react";
+// import React from "react";
+import PropTypes from "prop-types";
 
 const Caption = ({ className, children }) => {
   return (
@@ -10,6 +11,11 @@ const Caption = ({ className, children }) => {
       {children}
     </caption>
   );
+};
+
+Caption.propTypes = {
+  className: PropTypes.string,
+  children: PropTypes.node,
 };
 
 export default Caption;

@@ -1,5 +1,6 @@
 import React from "react";
 import { NavLink, useLocation } from "react-router-dom";
+import PropTypes from "prop-types";
 
 const CategoriesHeader = ({ categories, className = "" }) => {
   const location = useLocation();
@@ -49,6 +50,11 @@ const CategoriesHeader = ({ categories, className = "" }) => {
       </div>
     </div>
   );
+};
+
+CategoriesHeader.propTypes = {
+  categories: PropTypes.array,
+  className: PropTypes.string,
 };
 
 export default CategoriesHeader;

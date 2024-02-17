@@ -1,5 +1,5 @@
-import React from "react";
-
+// import React from "react";
+import PropTypes from "prop-types";
 const IconEyeToggle = ({ open = false, onClick }) => {
   const handleClick = () => {
     onClick((prev) => !prev);
@@ -57,6 +57,10 @@ const IconEyeToggle = ({ open = false, onClick }) => {
       />
     </svg>
   );
+};
+IconEyeToggle.propTypes = {
+  open: PropTypes.bool,
+  onClick: PropTypes.func,
 };
 
 export default IconEyeToggle;

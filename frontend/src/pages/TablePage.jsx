@@ -1,4 +1,3 @@
-import React from "react";
 import TableMain from "../modules/table/TableMain";
 
 const TablePage = () => {

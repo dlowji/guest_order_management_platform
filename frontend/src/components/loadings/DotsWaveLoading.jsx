@@ -1,4 +1,5 @@
-import React from "react";
+// import React from "react";
+import PropTypes from "prop-types";
 
 const DotsWaveLoading = ({ width = 20, height = 20, color }) => {
   return (
@@ -33,6 +34,12 @@ const DotsWaveLoading = ({ width = 20, height = 20, color }) => {
       ></div>
     </div>
   );
+};
+
+DotsWaveLoading.propTypes = {
+  width: PropTypes.number,
+  height: PropTypes.number,
+  color: PropTypes.string,
 };
 
 export default DotsWaveLoading;

@@ -1,8 +1,8 @@
+import { checkoutSteps } from "../../constants/CheckoutSteps";
 import React from "react";
 import TopNav from "../common/TopNav";
-import usePaymentItems from "../../context/usePaymentItems";
+import { usePaymentItems } from "../../context/usePaymentItems";
 import Swal from "sweetalert2";
-import checkoutSteps from "../../constants/CheckoutSteps";
 import { useNavigate } from "react-router-dom";
 import { usePayment } from "../../stores/usePayment";
 

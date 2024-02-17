@@ -1,4 +1,5 @@
-import React from "react";
+// import React from "react";
+import PropTypes from "prop-types";
 
 const MainContentHeader = ({ title, quantity, children }) => {
   return (
@@ -8,6 +9,12 @@ const MainContentHeader = ({ title, quantity, children }) => {
       {children}
     </div>
   );
+};
+
+MainContentHeader.propTypes = {
+  title: PropTypes.string,
+  quantity: PropTypes.string,
+  children: PropTypes.node,
 };
 
 export default MainContentHeader;

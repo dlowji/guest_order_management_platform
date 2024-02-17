@@ -1,4 +1,4 @@
-import userModel from "./user.js";
+import userModel from "./User.js";
 import employeeModel from "./Employee.js";
 import roleModel from "./Role.js";
 import tokenModel from "./token.js";
@@ -14,3 +14,4 @@ export const Token = tokenModel;
 export const Log = logModel;
 export const Category = categoryModel;
 export const Dish = dishModel;
+export const SeveredTable = severedTableModel;

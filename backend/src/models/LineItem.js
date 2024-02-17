@@ -1,10 +1,39 @@
 import mongoose from "mongoose";
 const { Schema, model } = mongoose;
 
-const lineItemSchema = new Schema({
-  order: {
-    type: Schema.Types.ObjectId,
-    ref: "Order",
-    required: true,
+const lineItemSchema = new Schema(
+  {
+    order: {
+      type: Schema.Types.ObjectId,
+      ref: "Order",
+      required: true,
+    },
+    dish: {
+      type: Schema.Types.ObjectId,
+      ref: "Dish",
+      required: true,
+    },
+    quantity: {
+      type: Number,
+      required: true,
+      min: 0,
+    },
+    price: {
+      type: Number,
+      required: true,
+      min: 0,
+    },
+    note: {
+      type: String,
+      default: "",
+    },
+    status: {
+      type: String,
+      enum: ["STOCK_OUT", "UN_COOK", "COOKING", "COOKED"],
+      default: "UN_COOK",
+    },
   },
-});
+  { timestamps: true }
+);
+const LineItem = model("LineItem", lineItemSchema);
+export default LineItem;

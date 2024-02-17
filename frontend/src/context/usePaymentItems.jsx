@@ -26,4 +26,4 @@ const usePaymentItems = () => {
   return context;
 };
 
-export default { usePaymentItems, PaymentItemsProvider };
+export { usePaymentItems, PaymentItemsProvider };

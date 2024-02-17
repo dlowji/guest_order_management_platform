@@ -38,9 +38,8 @@ export const login = async (req, res) => {
         },
       });
     });
-
   if (!user)
-    return res.status(404).json({
+    return res.status(401).json({
       error: {
         message: "The username or password is incorrect.",
         code: "INVALID_CREDENTIALS",
@@ -48,7 +47,7 @@ export const login = async (req, res) => {
     });
 
   if (!user.isActivated)
-    return res.status(400).json({
+    return res.status(401).json({
       error: {
         message: "Your account is not activated.",
         code: "ACCOUNT_NOT_ACTIVATED",
@@ -57,7 +56,7 @@ export const login = async (req, res) => {
 
   const match = await compare(req.body.password, user.password);
   if (!match)
-    return res.status(400).json({
+    return res.status(401).json({
       error: {
         message: "The username or password is incorrect.",
         code: "INVALID_CREDENTIALS",

@@ -1,4 +1,5 @@
-import React from "react";
+// import React from "react";
+import PropTypes from "prop-types";
 
 const Table = (props) => {
   return (
@@ -6,6 +7,10 @@ const Table = (props) => {
       {props.children}
     </table>
   );
+};
+
+Table.propTypes = {
+  children: PropTypes.node,
 };
 
 export default Table;
