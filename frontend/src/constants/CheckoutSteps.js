@@ -1,7 +1,7 @@
-import CheckoutStepFour from "@modules/checkout/CheckoutStepFour";
-import CheckoutStepOne from "@modules/checkout/CheckoutStepOne";
-import CheckoutStepThree from "@modules/checkout/CheckoutStepThree";
-import CheckoutStepTwo from "@modules/checkout/CheckoutStepTwo";
+import CheckoutStepFour from "../modules/checkout/CheckoutStepFour";
+import CheckoutStepOne from "../modules/checkout/CheckoutStepOne";
+import CheckoutStepThree from "../modules/checkout/CheckoutStepThree";
+import CheckoutStepTwo from "../modules/checkout/CheckoutStepTwo";
 
 export const checkoutSteps = [
   {

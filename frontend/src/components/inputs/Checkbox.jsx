@@ -1,11 +1,9 @@
 import React from "react";
 import { useController } from "react-hook-form";
+import PropTypes from "prop-types";
 
 const Checkbox = ({ id, name, control }) => {
-  const {
-    field,
-    fieldState: { isTouched },
-  } = useController({
+  const { field } = useController({
     name,
     control,
     defaultValue: false,
@@ -51,6 +49,12 @@ const Checkbox = ({ id, name, control }) => {
       </div>
     </>
   );
+};
+
+Checkbox.propTypes = {
+  id: PropTypes.string,
+  name: PropTypes.string.isRequired,
+  control: PropTypes.object.isRequired,
 };
 
 export default Checkbox;

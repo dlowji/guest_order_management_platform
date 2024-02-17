@@ -1,3 +1,3 @@
-const orderController = {};
+const OrderController = {};
 
-export default orderController;
+export default OrderController;

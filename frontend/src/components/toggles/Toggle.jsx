@@ -1,5 +1,5 @@
-import React from "react";
-
+// import React from "react";
+import PropTypes from "prop-types";
 const Toggle = ({ on, onClick }) => {
   return (
     <label className="relative inline-flex items-center cursor-pointer">
@@ -14,6 +14,11 @@ const Toggle = ({ on, onClick }) => {
       ></div>
     </label>
   );
+};
+
+Toggle.propTypes = {
+  on: PropTypes.bool,
+  onClick: PropTypes.func,
 };
 
 export default Toggle;

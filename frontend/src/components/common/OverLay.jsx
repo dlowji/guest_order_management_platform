@@ -1,4 +1,5 @@
-import React from "react";
+// import React from "react";
+import PropTypes from "prop-types";
 
 const OverLay = ({ isActive = false, onToggle }) => {
   return (
@@ -9,6 +10,10 @@ const OverLay = ({ isActive = false, onToggle }) => {
       onClick={onToggle}
     ></button>
   );
+};
+OverLay.propTypes = {
+  isActive: PropTypes.bool,
+  onToggle: PropTypes.func,
 };
 
 export default OverLay;

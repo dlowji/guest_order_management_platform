@@ -1,8 +1,8 @@
 import React from "react";
-
-const Badge = ({ varient, className = "", content = "" }) => {
-  const classNameByVarient = React.useMemo(() => {
-    switch (varient) {
+import PropTypes from "prop-types";
+const Badge = ({ variant, className = "", content = "" }) => {
+  const classNameByVariant = React.useMemo(() => {
+    switch (variant) {
       case "primary":
         return "border-primaryff text-white bg-primaryff border-primaryff";
       case "secondary":
@@ -22,14 +22,28 @@ const Badge = ({ varient, className = "", content = "" }) => {
       default:
         return "";
     }
-  }, [varient]);
+  }, [variant]);
   return (
     <span
-      className={`text-xs font-medium mr-2 px-2.5 py-0.5 rounded border ${classNameByVarient} ${className}`}
+      className={`text-xs font-medium mr-2 px-2.5 py-0.5 rounded border ${classNameByVariant} ${className}`}
     >
       {content}
     </span>
   );
 };
 
+Badge.propTypes = {
+  variant: PropTypes.oneOf([
+    "primary",
+    "secondary",
+    "success",
+    "danger",
+    "warning",
+    "info",
+    "light",
+    "dark",
+  ]).isRequired,
+  className: PropTypes.string,
+  content: PropTypes.string,
+};
 export default Badge;

@@ -1,4 +1,5 @@
-import React from "react";
+// import React from "react";
+import PropTypes from "prop-types";
 
 const THead = ({ headers, colClassName = "", children, hasAction = true }) => {
   return (
@@ -19,6 +20,18 @@ const THead = ({ headers, colClassName = "", children, hasAction = true }) => {
       </tr>
     </thead>
   );
+};
+
+THead.propTypes = {
+  headers: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string,
+      name: PropTypes.string,
+    })
+  ).isRequired,
+  colClassName: PropTypes.string,
+  children: PropTypes.node,
+  hasAction: PropTypes.bool,
 };
 
 export default THead;

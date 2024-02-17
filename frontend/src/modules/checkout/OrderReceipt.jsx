@@ -1,7 +1,8 @@
 import React from "react";
 import { formatCurrency } from "../../utils/formatCurrency";
+import PropTypes from "prop-types";
 
-const OrderReceipt = ({ orderItems = [], orderId, discount = 0, tax = 0 }) => {
+const OrderReceipt = ({ orderItems = [], discount = 0, tax = 0 }) => {
   const subTotal = React.useMemo(() => {
     return orderItems.reduce((acc, item) => {
       return acc + item.price * item.quantity;
@@ -160,6 +161,13 @@ const OrderReceipt = ({ orderItems = [], orderId, discount = 0, tax = 0 }) => {
       </tfoot>
     </table>
   );
+};
+
+OrderReceipt.propTypes = {
+  orderItems: PropTypes.array,
+  orderId: PropTypes.string,
+  discount: PropTypes.number,
+  tax: PropTypes.number,
 };
 
 export default OrderReceipt;

@@ -1,4 +1,5 @@
-import React from "react";
+// import React from "react";
+import PropTypes from "prop-types";
 
 const CircleLoading = ({ width = 6, height = 6, color = "#fff" }) => {
   const style = {
@@ -15,6 +16,12 @@ const CircleLoading = ({ width = 6, height = 6, color = "#fff" }) => {
       <div style={style}></div>
     </div>
   );
+};
+
+CircleLoading.propTypes = {
+  width: PropTypes.number,
+  height: PropTypes.number,
+  color: PropTypes.string,
 };
 
 export default CircleLoading;

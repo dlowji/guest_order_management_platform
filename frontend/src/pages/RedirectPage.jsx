@@ -1,21 +1,22 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../stores/useAuth";
 
 const RedirectPage = (props) => {
-    // const auth = useAuth();
-	// const navigate = useNavigate();
-	// React.useEffect(() => {
-	// 	if (auth.user?.roleName === Role.ADMIN) {
-	// 		navigate('/home');
-	// 	}
-	// 	if (auth.user?.roleName === Role.EMPLOYEE) {
-	// 		navigate('/table');
-	// 	}
-	// 	if (auth.user?.roleName === Role.CHEF) {
-	// 		navigate('/menu');
-	// 	}
-	// }, [auth.user?.roleName]);
-	return <></>;
+  const auth = useAuth();
+  const navigate = useNavigate();
+  React.useEffect(() => {
+    if (auth.user?.roleName === "Admin") {
+      navigate("/home");
+    }
+    if (auth.user?.roleName === "Employee") {
+      navigate("/table");
+    }
+    if (auth.user?.roleName === "Chef") {
+      navigate("/menu");
+    }
+  }, [auth.user?.roleName, navigate]);
+  return <></>;
 };
 
 export default RedirectPage;

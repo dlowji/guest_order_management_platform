@@ -1,16 +1,57 @@
-import { User } from "../../../models/index.js";
+import { User, Employee, Role } from "../../../models/index.js";
 import { errorHelper, logger, getText } from "../../../utils/index.js";
 
 export const getUser = async (req, res) => {
   const user = await User.findById(req.user._id).catch((err) => {
-    return res.status(500).json(errorHelper("00088", req, err.message));
+    return res.status(500).json({
+      error: {
+        message: "An internal server error occurred, please try again.",
+        code: "INTERNAL_SERVER_ERROR",
+        reason: err.message,
+      },
+    });
   });
 
-  logger("00089", req.user._id, getText("en", "00089"), "Info", req);
+  //find role name of user
+  const employee = await Employee.findById(user.employee).catch((err) => {
+    return res.status(500).json({
+      error: {
+        message: "An internal server error occurred, please try again.",
+        code: "INTERNAL_SERVER_ERROR",
+        reason: err.message,
+      },
+    });
+  });
+
+  if (!employee)
+    return res.status(404).json({
+      error: {
+        message: "Employee not found.",
+        code: "EMPLOYEE_NOT_FOUND",
+      },
+    });
+
+  const role = await Role.findById(employee.role).catch((err) => {
+    return res.status(500).json({
+      error: {
+        message: "An internal server error occurred, please try again.",
+        code: "INTERNAL_SERVER_ERROR",
+        reason: err.message,
+      },
+    });
+  });
+
+  if (!role)
+    return res.status(404).json({
+      error: {
+        message: "Role not found.",
+        code: "ROLE_NOT_FOUND",
+      },
+    });
+
   return res.status(200).json({
-    resultMessage: { en: getText("en", "00089"), tr: getText("tr", "00089") },
-    resultCode: "00089",
-    user,
+    code: "SUCCESS",
+    data: { ...user._doc, roleName: role.name },
   });
 };
 

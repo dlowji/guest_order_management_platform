@@ -7,7 +7,7 @@ const MultiSteps = () => {
 
   const percent = React.useMemo(() => {
     return Math.ceil((payment.currentStep / (payment.totalSteps - 1)) * 100);
-  }, [payment.currentStep]);
+  }, [payment.currentStep, payment.totalSteps]);
 
   return (
     <ProgressBar

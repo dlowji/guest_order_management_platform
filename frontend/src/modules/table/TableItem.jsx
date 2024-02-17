@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
 import { Link } from "react-router-dom";
 
-const TableItem = ({ item: { id, seats, tableStatus, title, updatedAt } }) => {
+const TableItem = ({ item: { _id, seats, tableStatus, title, updatedAt } }) => {
   if (seats % 2 !== 0) seats += 1;
   const statusColor = useMemo(() => {
     switch (tableStatus) {

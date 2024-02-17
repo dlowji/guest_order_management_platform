@@ -1,11 +1,13 @@
 import React from "react";
 import { usePayment } from "../../stores/usePayment";
 import Swal from "sweetalert2";
-import usePaymentItems from "../../context/usePaymentItems";
+import { usePaymentItems } from "../../context/usePaymentItems";
 import { useParams } from "react-router-dom";
 import LoadingCenter from "../common/LoadingCenter";
 import OrderReceipt from "./OrderReceipt";
 import Button from "../../components/buttons/Button";
+import { useQuery } from "@tanstack/react-query";
+import orderApi from "../../api/order";
 
 const CheckoutStepOne = () => {
   const nextStep = usePayment((state) => state.nextStep);
@@ -34,24 +36,20 @@ const CheckoutStepOne = () => {
   const { orderId, step } = useParams();
   const [orderLineItems, setOrderLineItems] = React.useState(items || []);
   console.log("🚀 ~ orderLineItems:", orderLineItems);
-  //   const { data: order, isFetching } = useQuery({
-  //     queryKey: ["order", orderId],
-  //     queryFn: () => orderApi.getById(orderId),
-  //     onSuccess: (data) => {
-  //       if (data.code === 200) {
-  //         setOrderLineItems(data.data?.orderLineItemResponseList || []);
-  //         setPaymentItem({
-  //           items: data.data?.orderLineItemResponseList || [],
-  //           total: data.data?.grandTotal || 0,
-  //           tableName: data.data?.tableName || "",
-  //         });
-  //       }
-  //     },
-  //   });
-  const order = {
-    data: [],
-  };
-  const isFetching = false;
+  const { data: order, isFetching } = useQuery({
+    queryKey: ["order", orderId],
+    queryFn: () => orderApi.getById(orderId),
+    onSuccess: (data) => {
+      if (data.code === 200) {
+        setOrderLineItems(data.data?.orderLineItemResponseList || []);
+        setPaymentItem({
+          items: data.data?.orderLineItemResponseList || [],
+          total: data.data?.grandTotal || 0,
+          tableName: data.data?.tableName || "",
+        });
+      }
+    },
+  });
 
   if (!orderId) {
     return (

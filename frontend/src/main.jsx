@@ -1,4 +1,4 @@
-import React from "react";
+// import React from "react";
 import ReactDOM from "react-dom/client";
 import "./styles/index.scss";
 import {
@@ -21,19 +21,28 @@ import KitchenOrder from "./modules/kitchen/KitchenOrder.jsx";
 import HistoryDetail from "./modules/history/HistoryDetail.jsx";
 import HistoryPage from "./pages/HistoryPage.jsx";
 import DashboardPage from "./pages/DashboardPage.jsx";
+import RedirectPage from "./pages/RedirectPage.jsx";
+import CheckoutPage from "./pages/CheckoutPage.jsx";
+import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
+import ProtectedRoute from "./modules/common/ProtectedRoute.jsx";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route errorElement={<ErrorPage />}>
       <Route element={<MainLayout />}>
-        <Route /*element={<ProtectedRoute allowedRoles={[Role.ADMIN]} />}*/>
-					<Route path="/home" element={<DashboardPage />}></Route>
-					<Route path="/history" element={<HistoryPage />}></Route>
-					<Route path="/history/:orderId" element={<HistoryDetail />}></Route>
-				</Route>
-        <Route /*element={<ProtectedRoute allowedRoles={[Role.ADMIN, Role.EMPLOYEE, Role.CHEF]} />}*/
+        <Route element={<ProtectedRoute allowedRoles={["ADMIN"]} />}>
+          <Route path="/home" element={<DashboardPage />}></Route>
+          <Route path="/history" element={<HistoryPage />}></Route>
+          <Route path="/history/:orderId" element={<HistoryDetail />}></Route>
+        </Route>
+        <Route
+          element={
+            <ProtectedRoute allowedRoles={["ADMIN", "EMPLOYEE", "CHEF"]} />
+          }
         >
-          {/* <Route path="/" element={<RedirectPage />}></Route> */}
+          <Route path="/" element={<RedirectPage />}></Route>
           <Route path="/table" element={<TablePage />} />
           <Route path="/menu" element={<MenuPage />}>
             <Route
@@ -43,7 +52,7 @@ const router = createBrowserRouter(
           </Route>
           <Route path="/order" element={<OrderPage />}></Route>
         </Route>
-        <Route /*element={<ProtectedRoute allowedRoles={[Role.CHEF]} />}*/>
+        <Route element={<ProtectedRoute allowedRoles={["CHEF"]} />}>
           <Route path="/kitchen" element={<KitchenPage />}></Route>
           <Route
             path="/kitchen/:orderId"
@@ -55,10 +64,13 @@ const router = createBrowserRouter(
           ></Route>
         </Route>
       </Route>
-      {/* <Route element={<ProtectedRoute allowedRoles={[Role.ADMIN, Role.EMPLOYEE]} />}>
-				<Route path="/checkout/:orderId" element={<CheckoutPage />}></Route>
-				<Route path="/checkout/:orderId/:step" element={<CheckoutPage />}></Route>
-			</Route> */}
+      <Route element={<ProtectedRoute allowedRoles={["ADMIN", "EMPLOYEE"]} />}>
+        <Route path="/checkout/:orderId" element={<CheckoutPage />}></Route>
+        <Route
+          path="/checkout/:orderId/:step"
+          element={<CheckoutPage />}
+        ></Route>
+      </Route>
       <Route
         element={
           <AuthenticateLayout
@@ -73,13 +85,31 @@ const router = createBrowserRouter(
   )
 );
 
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+      staleTime: 1000 * 30 * 1,
+      cacheTime: 1000 * 60 * 1,
+    },
+  },
+});
+
 document.addEventListener("DOMContentLoaded", function () {
   const container = document.getElementById("root");
   if (!container) throw new Error("No root element found!");
   const root = ReactDOM.createRoot(container);
   root.render(
     <>
-      <RouterProvider router={router}></RouterProvider>
+      <QueryClientProvider client={queryClient}>
+        <RouterProvider router={router}></RouterProvider>
+      </QueryClientProvider>
+      <ToastContainer
+        bodyClassName="font-primary text-sm"
+        pauseOnFocusLoss={false}
+        pauseOnHover={false}
+        autoClose={2000}
+      ></ToastContainer>
     </>
   );
 });

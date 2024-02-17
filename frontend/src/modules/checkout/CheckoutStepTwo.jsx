@@ -1,12 +1,14 @@
 import React from "react";
 import { usePayment } from "../../stores/usePayment";
 import Swal from "sweetalert2";
-import usePaymentItems from "../../context/usePaymentItems";
-import toast from "react-hot-toast";
+import { usePaymentItems } from "../../context/usePaymentItems";
+import { toast } from "react-toastify";
 import { convertToUSD } from "../../utils/formatCurrency";
 import Button from "../../components/buttons/Button";
 import PaypalButton from "../../components/buttons/PaypalButton";
-import ORDER_METHODS from '../../constants/OrderMethods';
+import { ORDER_METHODS } from "../../constants/OrderMethods";
+import { useMutation } from "@tanstack/react-query";
+import orderApi from "../../api/order";
 
 const CheckoutStepTwo = () => {
   const nextStep = usePayment((state) => state.nextStep);
@@ -15,21 +17,21 @@ const CheckoutStepTwo = () => {
 
   const setPaymentMethod = usePayment((state) => state.setPaymentMethod);
 
-  //   const { mutate } = useMutation({
-  //     mutationFn: () => {
-  //       return orderApi.checkoutOrder(currentOrderId);
-  //     },
-  //     onSuccess: (data) => {
-  //       if (data.code === 200) {
-  //         nextStep();
-  //       } else {
-  //         toast.error(data.message);
-  //       }
-  //     },
-  //   });
+  const { mutate } = useMutation({
+    mutationFn: () => {
+      return orderApi.checkoutOrder(currentOrderId);
+    },
+    onSuccess: (data) => {
+      if (data.code === 200) {
+        nextStep();
+      } else {
+        toast.error(data.message);
+      }
+    },
+  });
 
   const handleCheckoutByCash = () => {
-    // mutate();
+    mutate();
   };
 
   const handleMoveToNextStep = () => {

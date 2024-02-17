@@ -14,13 +14,16 @@ const orderSchema = new Schema(
       ref: "SeveredTable",
       required: true,
     },
-    lineItems: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "LineItem",
-        required: true,
-      },
-    ],
+    lineItems: {
+      type: [
+        {
+          type: Schema.Types.ObjectId,
+          ref: "LineItem",
+          required: true,
+        },
+      ],
+      default: [],
+    },
     status: {
       type: String,
       enum: ["CREATED", "IN_PROCESSING", "CANCELED", "COMPLETED"],

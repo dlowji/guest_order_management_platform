@@ -1,6 +1,7 @@
 // eslint-disable-next-line no-unused-vars
 import React from "react";
 import { useController } from "react-hook-form";
+import PropTypes from "prop-types";
 
 const Input = ({ id, control, name, type = "text", placeholder, children }) => {
   const {
@@ -18,7 +19,9 @@ const Input = ({ id, control, name, type = "text", placeholder, children }) => {
         <input
           id={id !== undefined ? id : name}
           type={type}
-          className={`w-full ${children ? 'p-5 pr-[60px]' : 'p-5'} bg-grayLight rounded-md placeholder-placeholderColor font-[500] border-transparent border-[1px] focus:bg-white focus:border-primaryff transition duration-200 ease-linear outline-none
+          className={`w-full ${
+            children ? "p-5 pr-[60px]" : "p-5"
+          } bg-grayLight rounded-md placeholder-placeholderColor font-[500] border-transparent border-[1px] focus:bg-white focus:border-primaryff transition duration-200 ease-linear outline-none
           ${
             error?.message
               ? " !border-error !text-error !focus:border-error"
@@ -41,6 +44,15 @@ const Input = ({ id, control, name, type = "text", placeholder, children }) => {
       )}
     </>
   );
+};
+
+Input.propTypes = {
+  id: PropTypes.string,
+  control: PropTypes.object.isRequired,
+  name: PropTypes.string.isRequired,
+  type: PropTypes.string,
+  placeholder: PropTypes.string,
+  children: PropTypes.node,
 };
 
 export default Input;
