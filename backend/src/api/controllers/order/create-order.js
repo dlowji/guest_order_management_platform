@@ -1,4 +1,4 @@
-import { validateCreateOrder } from "api/validators/order.validator.js";
+import { validateCreateOrder } from "../../validators/order.validator.js";
 import { User, SeveredTable, Order } from "../../../models/index.js";
 
 export const createOrder = async (req, res) => {
@@ -26,7 +26,7 @@ export const createOrder = async (req, res) => {
     });
   });
   if (!existUser) {
-    return res.status(404).json({
+    return res.status(401).json({
       error: {
         message: "User not found",
         code: "NOT_FOUND",
@@ -35,7 +35,7 @@ export const createOrder = async (req, res) => {
   }
 
   //check if table exists
-  const existTable = SeveredTable.exists({ _id: tableId }).catch((err) => {
+  const existTable = SeveredTable.findById(tableId).catch((err) => {
     return res.status(500).json({
       error: {
         message: "An internal server error occurred, please try again.",
@@ -45,7 +45,7 @@ export const createOrder = async (req, res) => {
     });
   });
   if (!existTable) {
-    return res.status(404).json({
+    return res.status(401).json({
       error: {
         message: "Table not found",
         code: "NOT_FOUND",
@@ -54,18 +54,7 @@ export const createOrder = async (req, res) => {
   }
 
   //check if table is free
-  const isTableFree = await SeveredTable.exists({
-    _id: tableId,
-    tableStatus: "FREE",
-  }).catch((err) => {
-    return res.status(500).json({
-      error: {
-        message: "An internal server error occurred, please try again.",
-        code: "INTERNAL_SERVER_ERROR",
-        reason: err.message,
-      },
-    });
-  });
+  const isTableFree = existTable.tableStatus === "FREE";
   if (!isTableFree) {
     return res.status(409).json({
       error: {
@@ -74,6 +63,20 @@ export const createOrder = async (req, res) => {
       },
     });
   }
+
+  //update table status
+  const update = {
+    tableStatus: "OCCUPIED",
+  };
+  await SeveredTable.findByIdAndUpdate(tableId, update).catch((err) => {
+    return res.status(500).json({
+      error: {
+        message: "An internal server error occurred, please try again.",
+        code: "INTERNAL_SERVER_ERROR",
+        reason: err.message,
+      },
+    });
+  });
 
   let order = new Order({
     user: userId,
@@ -93,22 +96,6 @@ export const createOrder = async (req, res) => {
     });
   });
 
-  //update table status
-  const update = {
-    tableStatus:"OCCUPIED",
-  }
-  await SeveredTable.findByIdAndUpdate(
-    tableId,
-    update,
-  ).catch((err) => {
-    return res.status(500).json({
-      error: {
-        message: "An internal server error occurred, please try again.",
-        code: "INTERNAL_SERVER_ERROR",
-        reason: err.message,
-      },
-    });
-  });
 
   return res.status(201).json({
     message: "Order created successfully",

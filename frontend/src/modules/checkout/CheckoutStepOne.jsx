@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { usePayment } from "../../stores/usePayment";
 import Swal from "sweetalert2";
 import { usePaymentItems } from "../../context/usePaymentItems";
@@ -36,7 +36,7 @@ const CheckoutStepOne = () => {
   const { orderId, step } = useParams();
   const [orderLineItems, setOrderLineItems] = React.useState(items || []);
   console.log("🚀 ~ orderLineItems:", orderLineItems);
-  const { data: order, isFetching } = useQuery({
+  const { isSuccess, data, isFetching } = useQuery({
     queryKey: ["order", orderId],
     queryFn: () => orderApi.getById(orderId),
     onSuccess: (data) => {
@@ -50,6 +50,12 @@ const CheckoutStepOne = () => {
       }
     },
   });
+
+  useEffect(() => {
+    if (isSuccess) {
+      console.log(data);
+    }
+  }, [isSuccess, data]); 
 
   if (!orderId) {
     return (
@@ -78,8 +84,8 @@ const CheckoutStepOne = () => {
         <OrderReceipt
           orderItems={orderLineItems}
           orderId={orderId}
-          discount={order?.data?.discount || 0}
-          tax={order?.data?.tax}
+          // discount={order?.data?.discount || 0}
+          // tax={order?.data?.tax}
         ></OrderReceipt>
       </div>
       <Button variant="primary" type="button" onClick={handleMoveToNextStep}>

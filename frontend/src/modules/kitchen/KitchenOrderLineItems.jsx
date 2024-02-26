@@ -6,6 +6,10 @@ import Swal from "sweetalert2";
 import OrderLineItemStatusResponse from "../../constants/OrderLineItemStatus";
 import Button from "../../components/buttons/Button";
 import KitchenOrderLineItem from "./KitchenOrderLineItem";
+import PropTypes from "prop-types";
+import { useQueryClient } from "@tanstack/react-query";
+import orderApi from "../../api/order";
+import kitchenApi from "../../api/kitchen";
 
 const KitchenOrderLineItems = ({ items = [] }) => {
   const { totalAccept, orderLineItems, orderDetail } = useOrderDetail();
@@ -18,7 +22,7 @@ const KitchenOrderLineItems = ({ items = [] }) => {
   }, [orderDetail?.orderStatus]);
 
   const navigate = useNavigate();
-  //   const queryClient = useQueryClient();
+  const queryClient = useQueryClient();
 
   const handleStartCook = () => {
     if (totalAccept < orderLineItems.length) {
@@ -42,15 +46,15 @@ const KitchenOrderLineItems = ({ items = [] }) => {
       confirmButtonText: "Yes, start cook!",
     }).then(async (result) => {
       if (result.isConfirmed) {
-        // const response = await orderApi.progressOrder(orderId, orderLineItems);
-        // if (response.code === 200) {
-        //   toast.success("Start cooking dishes!");
-        //   queryClient.refetchQueries(["order", orderId]);
-        //   queryClient.refetchQueries(["order", "in_processing"]);
-        //   navigate(`/kitchen?q=in_processing`);
-        // } else {
-        //   toast.error(response.message || "Something went wrong!");
-        // }
+        const response = await orderApi.progressOrder(orderId, orderLineItems);
+        if (response.code === 200) {
+          toast.success("Start cooking dishes!");
+          queryClient.refetchQueries(["order", orderId]);
+          queryClient.refetchQueries(["order", "in_processing"]);
+          navigate(`/kitchen?q=in_processing`);
+        } else {
+          toast.error(response.message || "Something went wrong!");
+        }
       }
     });
   };
@@ -72,18 +76,18 @@ const KitchenOrderLineItems = ({ items = [] }) => {
       confirmButtonText: "Yes, mark done!",
     }).then(async (result) => {
       if (result.isConfirmed) {
-        // const response = await kitchenApi.markDoneOrder(
-        //   orderId,
-        //   orderLineItems
-        // );
-        // if (response.code === 200) {
-        //   toast.success("Order marked as done!");
-        //   queryClient.refetchQueries(["order", "in_processing"]);
-        //   queryClient.refetchQueries(["order", orderId]);
-        //   navigate("/kitchen?q=in_processing");
-        // } else {
-        //   toast.error(response.message || "Something went wrong!");
-        // }
+        const response = await kitchenApi.markDoneOrder(
+          orderId,
+          orderLineItems
+        );
+        if (response.code === 200) {
+          toast.success("Order marked as done!");
+          queryClient.refetchQueries(["order", "in_processing"]);
+          queryClient.refetchQueries(["order", orderId]);
+          navigate("/kitchen?q=in_processing");
+        } else {
+          toast.error(response.message || "Something went wrong!");
+        }
       }
     });
   };
@@ -135,6 +139,10 @@ const KitchenOrderLineItems = ({ items = [] }) => {
       )}
     </div>
   );
+};
+
+KitchenOrderLineItems.propTypes = {
+  items: PropTypes.array,
 };
 
 export default KitchenOrderLineItems;

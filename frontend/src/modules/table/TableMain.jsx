@@ -7,29 +7,27 @@ import TableItem from "./TableItem";
 import { useQuery } from "@tanstack/react-query";
 import useQueryString from "../../utils/queryString";
 import tableApi from "../../api/table";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { toast } from "react-toastify";
 const TableMain = () => {
-  const [tables, setTables] = useState([]);
-  const [isFetching, setIsFetching] = useState(false);
-  const [error, setError] = useState(null);
-  const [query, setQuery] = useState("");
+  const queryString = useQueryString();
+  const statusQ = queryString.q || "";
+  const { isError, error, data, isFetching } = useQuery({
+    queryKey: ["tables", statusQ],
+    queryFn: () => {
+      return tableApi.getTables(statusQ);
+    },
+  });
   useEffect(() => {
-    setIsFetching(true);
-    fetch(`http://localhost:5000/api/tables?statusQ=${query}`)
-      .then((res) => res.json())
-      .then((response) => {
-        if (response.code == "SUCCESS") setTables(response.data);
-        else {
-          setError(response.message);
-        }
-      });
-    setIsFetching(false);
-  }, [query]);
+    if (isError) {
+      toast.error(error.message);
+    }
+  }, [error, isError]);
   return (
     <div className="table-left">
       <MainContentHeader
         title="Choose tables"
-        quantity={tables?.length ? `${tables.length} tables` : "0 tables"}
+        quantity={data?.length ? `${data.length} tables` : "0 tables"}
       ></MainContentHeader>
       <CategoriesHeader
         categories={categoriesTableItems}
@@ -41,10 +39,10 @@ const TableMain = () => {
             <CircleLoading color="#ff7200"></CircleLoading>
           </div>
         )}
-        {tables &&
+        {data &&
           !isFetching &&
           !error &&
-          tables.map((item) => (
+          data.map((item) => (
             <TableItem
               key={item._id}
               item={{

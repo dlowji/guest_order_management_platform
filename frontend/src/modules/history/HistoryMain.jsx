@@ -1,24 +1,22 @@
-import React from "react";
 import LoadingCenter from "../common/LoadingCenter";
 import HistoryTable from "./HistoryTable";
+import PropTypes from "prop-types";
+import { useQuery } from "@tanstack/react-query";
+import orderApi from "../../api/order";
 
 const HistoryMain = ({ selectedDate, filter }) => {
-  //   const { data, isFetching } = useQuery({
-  //     queryKey: ["history", selectedDate, filter],
-  //     queryFn: () => {
-  //       const dateObj = selectedDate ? new Date(selectedDate) : new Date();
-  //       if (!selectedDate) {
-  //         dateObj.setHours(0, 0, 0, 0);
-  //       }
+  const { data, isFetching } = useQuery({
+    queryKey: ["history", selectedDate, filter],
+    queryFn: () => {
+      const dateObj = selectedDate ? new Date(selectedDate) : new Date();
+      if (!selectedDate) {
+        dateObj.setHours(0, 0, 0, 0);
+      }
 
-  //       const timeStamp = dateObj.getTime();
-  //       return orderApi.getHistory(timeStamp / 1000, filter);
-  //     },
-  //   });
-  const isFetching = false;
-  const data = {
-    data: [],
-  };
+      const timeStamp = dateObj.getTime();
+      return orderApi.getHistory(timeStamp / 1000, filter);
+    },
+  });
 
   if (isFetching) {
     return <LoadingCenter></LoadingCenter>;
@@ -34,6 +32,11 @@ const HistoryMain = ({ selectedDate, filter }) => {
       </div>
     </div>
   );
+};
+
+HistoryMain.propTypes = {
+  selectedDate: PropTypes.string,
+  filter: PropTypes.string,
 };
 
 export default HistoryMain;

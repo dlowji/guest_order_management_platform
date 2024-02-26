@@ -2,7 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../stores/useAuth";
 
-const RedirectPage = (props) => {
+const RedirectPage = () => {
   const auth = useAuth();
   const navigate = useNavigate();
   React.useEffect(() => {

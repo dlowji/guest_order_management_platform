@@ -1,4 +1,3 @@
-import React from "react";
 import Table from "../../components/table/Table";
 import Caption from "../../components/table/Caption";
 import THead from "../../components/table/THead";
@@ -6,6 +5,7 @@ import TBody from "../../components/table/TBody";
 import TableHeaderSection from "../common/TableHeaderSection";
 import Button from "../../components/buttons/Button";
 import calculateDuration from "../../utils/calculateDuration";
+import PropTypes from "prop-types";
 
 const tableHeader = [
   {
@@ -21,6 +21,7 @@ const tableHeader = [
     name: "Duration",
   },
 ];
+
 const KitchenTable = ({ items = [], caption = "New order" }) => {
   return (
     <Table>
@@ -67,6 +68,11 @@ const KitchenTable = ({ items = [], caption = "New order" }) => {
       </TBody>
     </Table>
   );
+};
+
+KitchenTable.propTypes = {
+  items: PropTypes.array,
+  caption: PropTypes.string,
 };
 
 export default KitchenTable;

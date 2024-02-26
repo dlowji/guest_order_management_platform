@@ -1,20 +1,22 @@
 import React from "react";
 import { formatCurrency } from "../../utils/formatCurrency";
+import { useOrderState } from "../../stores/useOrderState";
 
 const MenuOrderCalculate = () => {
-  // const orderItems = useMenuItemsOrder((state) => state.menuOrder.menuItemsOrder);
-  const orderItems = [{ dishId: 1, title: "Pizza", price: 10, quantity: 2}];
+  const orderedLineItems = useOrderState(
+    (state) => state.orderState.orderedLineItems
+  );
 
   const totalPrice = React.useMemo(() => {
-    return orderItems.reduce((acc, item) => {
+    return orderedLineItems.reduce((acc, item) => {
       return acc + item.price * item.quantity;
     }, 0);
-  }, [orderItems]);
+  }, [orderedLineItems]);
 
   return (
     <div className="menu-order-top">
       <div className="menu-order-top-calculate">
-        {orderItems.map((item, index) => {
+        {orderedLineItems.map((item, index) => {
           return (
             <div
               className="menu-order-top-calculate-item"

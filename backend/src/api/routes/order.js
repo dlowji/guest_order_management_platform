@@ -3,8 +3,10 @@ import OrderController from "../controllers/order/index.js";
 
 const router = Router();
 
-// router.post("/create", OrderController.createOrder);
-// router.post("/placed", OrderController.updatePlacedOrder);
-// router.post("/checkout", OrderController.checkoutOrder);
-// router.post("/progress", OrderController.updateProgressOrder);
+router.post("/", OrderController.createOrder);
+router.get("/:id", OrderController.getOrderById);
+router.get("/", OrderController.getOrdersByProperties);
+router.post("/placed", OrderController.placeOrder);
+router.post("/checkout", OrderController.checkOutOrder);
+router.post("/progress", OrderController.progressOrder);
 export default router;

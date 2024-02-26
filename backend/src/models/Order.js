@@ -1,6 +1,8 @@
-import { required } from "joi";
 import mongoose from "mongoose";
+import {LineItem} from "./index.js";
 const { Schema, model } = mongoose;
+
+const TAX_RATE = 0.1;
 
 const orderSchema = new Schema(
   {
@@ -65,6 +67,20 @@ const orderSchema = new Schema(
 );
 
 orderSchema.pre("save", (next) => {
+  const totalLineItemPrice = this.lineItems.reduce(async (acc, currentId) => {
+    await LineItem.find({
+      _id: currentId,
+      status: { $nin: ["STOCK_OUT", "UN_COOK"] },
+    })
+      .then((item) => {
+        acc += item.price * item.quantity;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, 0);
+  this.subTotal = totalLineItemPrice;
+  this.tax = this.subTotal * TAX_RATE;
   this.total = this.subTotal + this.tax;
   this.grandTotal = this.total - this.discount - this.itemDiscount;
   next();

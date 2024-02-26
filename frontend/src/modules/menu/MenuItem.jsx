@@ -2,10 +2,10 @@ import React, { useMemo } from "react";
 import MenuButtonAddToCart from "./MenuButtonAddToCart";
 import MenuButtonToggle from "./MenuButtonToggle";
 import { formatCurrency } from "../../utils/formatCurrency";
+import PropTypes from "prop-types";
+import { useAuth } from "../../stores/useAuth";
 
 const MenuItem = ({ id, image, title, price, status, icon }) => {
-    const isEmployee = true;
-
   const iconClassnames = React.useMemo(() => {
     switch (status.toLowerCase()) {
       case "available":
@@ -19,6 +19,12 @@ const MenuItem = ({ id, image, title, price, status, icon }) => {
     }
   }, [icon, status]);
 
+  const user = useAuth((state) => state.user);
+  const roleName = user.roleName;
+  const isEmployee = useMemo(() => {
+    return roleName === "Employee" || roleName === "Admin";
+  }, [roleName]);
+
   const reFormatStatus = useMemo(() => {
     if (status.toUpperCase() === "AVAILABLE") {
       return "Available";
@@ -28,6 +34,11 @@ const MenuItem = ({ id, image, title, price, status, icon }) => {
     }
     return status;
   }, [status]);
+
+  if (isEmployee && status === "UN_AVAILABLE") {
+    return null;
+  }
+
   return (
     <div className="menu-item">
       <div className="menu-item-image">
@@ -60,6 +71,15 @@ const MenuItem = ({ id, image, title, price, status, icon }) => {
       </div>
     </div>
   );
+};
+
+MenuItem.propTypes = {
+  id: PropTypes.string,
+  image: PropTypes.string,
+  title: PropTypes.string,
+  price: PropTypes.number,
+  status: PropTypes.string,
+  icon: PropTypes.string,
 };
 
 export default MenuItem;

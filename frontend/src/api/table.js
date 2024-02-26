@@ -9,7 +9,11 @@ class TableApi {
     const config = statusQ ? { params: { statusQ } } : {};
 
     const response = await this.request.get(`${this.url}`, config);
-    return response.data;
+    if (response.data.code === "SUCCESS") {
+      return response.data.data;
+    } else {
+      console.log("Error: ", response.data);
+    }
   }
 }
 

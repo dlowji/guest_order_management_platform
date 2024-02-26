@@ -2,89 +2,89 @@ import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 import formatOrderItems from "../utils/formatOrderItems";
 
-export const useMenuItems = create(
+export const useOrderState = create(
   devtools(
     (set, get) => ({
-      menuOrder: {
+      orderState: {
         orderId: "",
-        menuItemsOrder: [],
+        orderedLineItems: [],
         method: "POST",
       },
-      getMenuItemsOrder: () => {
-        return [...get().menuOrder.menuItemsOrder];
+      getOrderedLineItems: () => {
+        return [...get().orderState.orderedLineItems];
       },
-      setMenuOrder: (menuOrder) => {
+      setOrderState: (orderState) => {
         return set((state) => {
           return {
-            menuOrder: {
-              ...state.menuOrder,
-              ...menuOrder,
+            orderState: {
+              ...state.orderState,
+              ...orderState,
             },
           };
         });
       },
 
-      // setMenuItemsOrder: (menuItemsOrder: IMenuOrderItem) => {
+      // setOrderedLineItems: (orderedLineItems: IOrderStateItem) => {
       // 	return set((state) => {
-      // 		const currentOrderItem = state.menuOrder.menuItemsOrder.find(
-      // 			(item) => item.dishId === menuItemsOrder.dishId,
+      // 		const currentOrderItem = state.orderState.orderedLineItems.find(
+      // 			(item) => item.dishId === orderedLineItems.dishId,
       // 		);
       // 		if (currentOrderItem) {
-      // 			currentOrderItem.quantity += menuItemsOrder.quantity;
+      // 			currentOrderItem.quantity += orderedLineItems.quantity;
       // 			return {
-      // 				menuOrder: {
-      // 					...state.menuOrder,
-      // 					menuItemsOrder: [...state.menuOrder.menuItemsOrder],
+      // 				orderState: {
+      // 					...state.orderState,
+      // 					orderedLineItems: [...state.orderState.orderedLineItems],
       // 				},
       // 			};
       // 		}
       // 		return {
-      // 			menuOrder: {
-      // 				...state.menuOrder,
-      // 				menuItemsOrder: [...state.menuOrder.menuItemsOrder, menuItemsOrder],
+      // 			orderState: {
+      // 				...state.orderState,
+      // 				orderedLineItems: [...state.orderState.orderedLineItems, orderedLineItems],
       // 			},
       // 		};
       // 	});
       // },
-      addToOrder: (menuItems) => {
+      addToOrder: (lineItems) => {
         return set((state) => {
-          const currentOrders = [...state.menuOrder.menuItemsOrder, menuItems];
+          const currentOrders = [...state.orderState.orderedLineItems, lineItems];
           const formattedOrders = formatOrderItems([...currentOrders]);
 
           return {
-            menuOrder: {
-              ...state.menuOrder,
-              menuItemsOrder: formattedOrders,
+            orderState: {
+              ...state.orderState,
+              orderedLineItems: formattedOrders,
             },
           };
         });
       },
       increment: (dishId, orderLineItemId) => {
         return set((state) => {
-          const currentOrderItem = state.menuOrder.menuItemsOrder.find(
+          const currentOrderItem = state.orderState.orderedLineItems.find(
             (item) =>
               item.orderLineItemId === orderLineItemId && item.dishId === dishId
           );
           if (currentOrderItem) {
             currentOrderItem.quantity += 1;
             return {
-              menuOrder: {
-                ...state.menuOrder,
-                menuItemsOrder: [...state.menuOrder.menuItemsOrder],
+              orderState: {
+                ...state.orderState,
+                orderedLineItems: [...state.orderState.orderedLineItems],
               },
             };
           }
           return {
-            menuOrder: {
-              ...state.menuOrder,
-              menuItemsOrder: [...state.menuOrder.menuItemsOrder],
+            orderState: {
+              ...state.orderState,
+              orderedLineItems: [...state.orderState.orderedLineItems],
             },
           };
         });
       },
       decrement: (dishId, orderLineItemId) => {
         return set((state) => {
-          const currentOrderItem = state.menuOrder.menuItemsOrder.find(
+          const currentOrderItem = state.orderState.orderedLineItems.find(
             (item) =>
               item.orderLineItemId === orderLineItemId && item.dishId === dishId
           );
@@ -93,23 +93,23 @@ export const useMenuItems = create(
               currentOrderItem.quantity -= 1;
             }
             return {
-              menuOrder: {
-                ...state.menuOrder,
-                menuItemsOrder: [...state.menuOrder.menuItemsOrder],
+              orderState: {
+                ...state.orderState,
+                orderedLineItems: [...state.orderState.orderedLineItems],
               },
             };
           }
           return {
-            menuOrder: {
-              ...state.menuOrder,
-              menuItemsOrder: [...state.menuOrder.menuItemsOrder],
+            orderState: {
+              ...state.orderState,
+              orderedLineItems: [...state.orderState.orderedLineItems],
             },
           };
         });
       },
       updateNote: (dishId, note, orderLineItemId) => {
         return set((state) => {
-          const currentOrderItem = state.menuOrder.menuItemsOrder.find(
+          const currentOrderItem = state.orderState.orderedLineItems.find(
             (item) =>
               item.dishId === dishId && item.orderLineItemId === orderLineItemId
           );
@@ -117,9 +117,9 @@ export const useMenuItems = create(
             currentOrderItem.note = note;
           }
           return {
-            menuOrder: {
-              ...state.menuOrder,
-              menuItemsOrder: [...state.menuOrder.menuItemsOrder],
+            orderState: {
+              ...state.orderState,
+              orderedLineItems: [...state.orderState.orderedLineItems],
             },
           };
         });

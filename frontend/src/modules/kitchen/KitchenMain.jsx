@@ -1,26 +1,23 @@
-import React from "react";
 import LoadingCenter from "../common/LoadingCenter";
 import KitchenTable from "./KitchenTable";
 import { categoriesKitchenOrder } from "../../constants/CategoriesKitchenOrder";
+import useQueryString from "../../utils/queryString";
+import { useQuery } from "@tanstack/react-query";
+import orderApi from "../../api/order";
+import { useMemo } from "react";
 
 const KitchenMain = () => {
-  const isFetching = false;
-  const orderItems = {
-    data: [],
-  };
-  //   const { q: status } = useQueryString();
-  //   const { data: orderItems, isFetching } = useQuery({
-  //     queryKey: ["order", status],
-  //     queryFn: () => {
-  //       return orderApi.getAll(status);
-  //     },
-  //   });
-  const status = "";
+  const { q: status } = useQueryString();
+  const { data: orderItems, isFetching } = useQuery({
+    queryKey: ["order", status],
+    queryFn: () => {
+      return orderApi.getAll(status);
+    },
+  });
 
-  //   const category = React.useMemo(() => {
-  //     return categoriesKitchenOrder.find((item) => item.id === status);
-  //   }, [status]);
-  const category = categoriesKitchenOrder;
+  const category = useMemo(() => {
+    return categoriesKitchenOrder.find((item) => item.id === status);
+  }, [status]);
 
   if (isFetching) {
     return <LoadingCenter></LoadingCenter>;

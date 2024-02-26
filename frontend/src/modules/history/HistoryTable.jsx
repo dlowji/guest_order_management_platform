@@ -1,4 +1,3 @@
-import React from "react";
 import Table from "../../components/table/Table";
 import Caption from "../../components/table/Caption";
 import TableHeaderSection from "../common/TableHeaderSection";
@@ -7,7 +6,8 @@ import TBody from "../../components/table/TBody";
 import calculateDuration from "../../utils/calculateDuration";
 import { formatCurrency } from "../../utils/formatCurrency";
 import Button from "../../components/buttons/Button";
-const hitoryTableHeader = [
+import PropTypes from "prop-types";
+const historyTableHeader = [
   {
     id: 1,
     name: "Order no",
@@ -34,7 +34,7 @@ const HistoryTable = ({ items = [], caption = "Order completed" }) => {
           totalItems={items.length}
         ></TableHeaderSection>
       </Caption>
-      <THead headers={hitoryTableHeader} hasAction />
+      <THead headers={historyTableHeader} hasAction />
       <TBody>
         {items.length === 0 && (
           <tr className="bg-white border-b">
@@ -45,7 +45,7 @@ const HistoryTable = ({ items = [], caption = "Order completed" }) => {
         )}
         {items.map((item, index) => {
           const duration = calculateDuration(item.createdAt);
-          const formatedDuration = `${duration.hours}h ${duration.minutes}m`;
+          const formattedDuration = `${duration.hours}h ${duration.minutes}m`;
 
           return (
             <tr key={index} className="bg-white border-b">
@@ -54,7 +54,7 @@ const HistoryTable = ({ items = [], caption = "Order completed" }) => {
               </td>
               <td className="px-6 py-4">{item.accountName}</td>
               <td className="px-6 py-4">{formatCurrency(item.grandTotal)}</td>
-              <td className="px-6 py-4">{formatedDuration}</td>
+              <td className="px-6 py-4">{formattedDuration}</td>
               <td className="px-6 py-4 flex items-center gap-3">
                 <Button
                   type="button"
@@ -71,6 +71,11 @@ const HistoryTable = ({ items = [], caption = "Order completed" }) => {
       </TBody>
     </Table>
   );
+};
+
+HistoryTable.propTypes = {
+  items: PropTypes.array,
+  caption: PropTypes.string,
 };
 
 export default HistoryTable;

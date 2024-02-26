@@ -73,8 +73,6 @@ const LoginPage = () => {
         const access_token = response.access_token;
         setTokenService(access_token);
         refetch();
-        console.log(status);
-        console.log("before navigate");
         navigate("/");
       } else {
         toast.error(message);

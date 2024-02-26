@@ -6,7 +6,7 @@ import Badge from "../../components/badge";
 
 import { Step, ProgressBar } from "react-step-progress-bar";
 import OrderLineItemStatus from "../../constants/OrderLineItemStatus";
-import OrderLineItemStatusResponse from "../../constants/OrderLineItemStatus";
+import PropTypes from "prop-types";
 
 const KitchenOrderLineItem = ({ item }) => {
   const { currentStep, totalSteps } = useSteps(
@@ -64,13 +64,13 @@ const KitchenOrderLineItem = ({ item }) => {
 
   const badgeVariant = React.useMemo(() => {
     switch (item.OrderLineItemStatus) {
-      case OrderLineItemStatusResponse.STOCK_OUT:
+      case "STOCK_OUT":
         return "dark";
-      case OrderLineItemStatusResponse.UN_COOK:
+      case "UN_COOK":
         return "secondary";
-      case OrderLineItemStatusResponse.COOKING:
+      case "COOKING":
         return "primary";
-      case OrderLineItemStatusResponse.COOKED:
+      case "COOKED":
         return "success";
       default:
         return "";
@@ -79,25 +79,25 @@ const KitchenOrderLineItem = ({ item }) => {
 
   const badgeContent = React.useMemo(() => {
     switch (item.OrderLineItemStatus) {
-      case OrderLineItemStatusResponse.STOCK_OUT:
+      case "STOCK_OUT":
         return "Stock out";
-      case OrderLineItemStatusResponse.UN_COOK:
+      case "UN_COOK":
         return "Pending";
-      case OrderLineItemStatusResponse.COOKING:
+      case "COOKING":
         return "Cooking";
-      case OrderLineItemStatusResponse.COOKED:
+      case "COOKED":
         return "Cooked";
       default:
         return "";
     }
-  }, [item.orderLineItemStatus]);
+  }, [item.OrderLineItemStatus]);
 
   const isNewOrder = React.useMemo(() => {
-    return item.OrderLineItemStatus === OrderLineItemStatusResponse.UN_COOK;
+    return item.OrderLineItemStatus === "UN_COOK";
   }, [item.OrderLineItemStatus]);
 
   const isInProcessing = React.useMemo(() => {
-    return item.OrderLineItemStatus === OrderLineItemStatusResponse.COOKING;
+    return item.OrderLineItemStatus === "COOKING";
   }, [item.OrderLineItemStatus]);
 
   return (
@@ -178,6 +178,17 @@ const KitchenOrderLineItem = ({ item }) => {
       </div>
     </div>
   );
+};
+
+KitchenOrderLineItem.propTypes = {
+  item: PropTypes.shape({
+    dishId: PropTypes.string,
+    image: PropTypes.string,
+    note: PropTypes.string,
+    title: PropTypes.string,
+    quantity: PropTypes.number,
+    OrderLineItemStatus: PropTypes.string,
+  }),
 };
 
 export default KitchenOrderLineItem;

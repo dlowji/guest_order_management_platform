@@ -1,29 +1,30 @@
-import React from "react";
+import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import useOrderDetail from "../../context/useOrderDetail";
 import LoadingCenter from "../common/LoadingCenter";
 import TopNav from "../common/TopNav";
 import KitchenOrderLineItems from "./KitchenOrderLineItems";
+import orderApi from "../../api/orderApi";
+import { useQuery } from "@tanstack/react-query";
 
 const KitchenOrder = () => {
   const { orderId } = useParams();
   const { setOrderDetail } = useOrderDetail();
-  const isFetching = false;
-  const orderDetail = {
-    data: [],
-  };
 
-  //   const { data, isFetching } = useQuery({
-  //     queryKey: ["order", orderId],
-  //     queryFn: () => {
-  //       return orderApi.getById(orderId);
-  //     },
-  //     onSuccess: (data) => {
-  //       if (data.code === 200 && data?.data) {
-  //         setOrderDetail(data?.data);
-  //       }
-  //     },
-  //   });
+  const { isSuccess, data, isFetching } = useQuery({
+    queryKey: ["order", orderId],
+    queryFn: () => {
+      return orderApi.getById(orderId);
+    },
+  });
+
+  useEffect(() => {
+    if (isSuccess) {
+      if (data.code === "SUCCESS" && data?.data) {
+        setOrderDetail(data?.data);
+      }
+    }
+  }, [data, isSuccess, setOrderDetail]);
 
   const navigate = useNavigate();
 
@@ -40,13 +41,13 @@ const KitchenOrder = () => {
         titleMain={`Order ${orderId?.slice(-4)}`}
         onBack={handleBackToPreviousPage}
         onBackToHome={() => navigate("/")}
-        subTitle={orderDetail?.data?.tableName || ""}
+        subTitle={data?.data?.tableName || ""}
         canBack={true}
         canBackToHome={false}
       ></TopNav>
       <div className="mt-10">
         <KitchenOrderLineItems
-          items={orderDetail?.data?.orderLineItemResponseList || []}
+          items={data?.data?.orderLineItemResponseList || []}
         ></KitchenOrderLineItems>
       </div>
     </>

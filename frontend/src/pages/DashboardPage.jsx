@@ -4,7 +4,7 @@ import StatisticItems from "../modules/common/StatisticItems";
 import TrendingTable from "../modules/dashboard/TrendingTable";
 import StockOutTable from "../modules/dashboard/StockOutTable";
 import { useQuery } from "@tanstack/react-query";
-import orderAPi from "../api/order";
+import orderApi from "../api/order";
 
 const DashboardPage = () => {
   const { data: statisticItems } = useQuery({

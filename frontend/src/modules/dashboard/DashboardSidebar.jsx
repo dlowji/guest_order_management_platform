@@ -1,5 +1,4 @@
 import React from "react";
-import Role from "../../constants/Role";
 import { DropdownProvider } from "../../context/useDropdown";
 import SubMenuSidebar from "../../modules/common/SubMenuSidebar";
 import { useAuth } from "@stores/useAuth";
@@ -11,49 +10,49 @@ const items = [
     href: "/home",
     icon: "fa-solid fa-house",
     isActive: true,
-    permissions: [Role.ADMIN],
+    permissions: ["ADMIN"],
   },
   {
     name: "Table",
     href: "/table",
     icon: "fa-solid fa-table",
     isActive: true,
-    permissions: [Role.ADMIN, Role.EMPLOYEE],
+    permissions: ["ADMIN", "EMPLOYEE"],
   },
   {
     name: "Menu",
     href: "/menu",
     icon: "fa-sharp fa-solid fa-bell-concierge",
     isActive: true,
-    permissions: [Role.EMPLOYEE, Role.CHEF, Role.ADMIN],
+    permissions: ["EMPLOYEE", "CHEF", "ADMIN"],
   },
   {
     name: "Order",
     href: "/order",
     icon: "fa-solid fa-shopping-cart",
     isActive: true,
-    permissions: [Role.ADMIN, Role.EMPLOYEE],
+    permissions: ["ADMIN", "EMPLOYEE"],
   },
   {
     name: "Kitchen",
     href: "/kitchen",
     icon: "fa-solid fa-utensils",
     isActive: true,
-    permissions: [Role.CHEF],
+    permissions: ["CHEF"],
   },
   {
     name: "History",
     href: "/history",
     icon: "fa-solid fa-clock",
     isActive: true,
-    permissions: [Role.ADMIN],
+    permissions: ["ADMIN"],
   },
   {
     name: "Report",
     href: "/report",
     icon: "fa-solid fa-chart-simple",
     isActive: false,
-    permissions: [Role.ADMIN],
+    permissions: ["ADMIN"],
   },
 ];
 const DashboardSidebar = () => {
@@ -64,7 +63,7 @@ const DashboardSidebar = () => {
     });
   };
 
-  const [currentRole, setCurrentRole] = React.useState < Role > Role.EMPLOYEE;
+  const [currentRole, setCurrentRole] = React.useState("EMPLOYEE");
 
   const itemsFilter = React.useMemo(() => {
     return items.filter((item) => item.permissions.includes(currentRole));
