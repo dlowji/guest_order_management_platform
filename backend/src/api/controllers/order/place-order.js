@@ -7,7 +7,9 @@ import {
 } from "../../../models/index.js";
 
 export const placeOrder = async (req, res) => {
+  //only CREATED and IN_PROCESSING orders can be updated
   const allowedOrderStatus = ["CREATED", "IN_PROCESSING"];
+
   const { error } = validatePlaceOrder(req.body);
   if (error) {
     return res.status(400).json({
@@ -18,7 +20,9 @@ export const placeOrder = async (req, res) => {
       },
     });
   }
-  const { orderId, items } = req.body;
+
+  const { orderId, orderedLineItems } = req.body;
+
   const order = await Order.findById(orderId).catch((err) => {
     return res.status(500).json({
       error: {
@@ -28,6 +32,7 @@ export const placeOrder = async (req, res) => {
       },
     });
   });
+
   if (!order) {
     return res.status(404).json({
       error: {
@@ -36,6 +41,7 @@ export const placeOrder = async (req, res) => {
       },
     });
   }
+
   if (!allowedOrderStatus.includes(order.status)) {
     return res.status(400).json({
       error: {
@@ -46,25 +52,41 @@ export const placeOrder = async (req, res) => {
     });
   }
 
-  items.forEach(async (item) => {
+  orderedLineItems.forEach(async (item) => {
     const { lineItemId } = item;
-    const updateQuantity = false;
-    const updateNote = false;
+
     //update order
     if (lineItemId) {
       //check if line item is in order
-      const existLineItem = order.items.find((item) => item._id === lineItemId);
+      const existLineItem = order.lineItems.find((id) => id === lineItemId);
       if (!existLineItem) {
-        return res.status(404).json({
+        return res.status(401).json({
+          error: {
+            message: "Line item not found in this order",
+            code: "NOT_FOUND",
+          },
+        });
+      }
+      const { quantity, note } = item;
+      const lineItem = await LineItem.findById(lineItemId).catch((err) => {
+        return res.status(500).json({
+          error: {
+            message: "An internal server error occurred, please try again.",
+            code: "INTERNAL_SERVER_ERROR",
+            reason: err.message,
+          },
+        });
+      });
+      if (!lineItem) {
+        return res.status(401).json({
           error: {
             message: "Line item not found",
             code: "NOT_FOUND",
           },
         });
       }
-      const { quantity, note } = item;
-      const oldNote = existLineItem.note;
-      const oldQuantity = existLineItem.quantity;
+      const oldNote = lineItem.note;
+      const oldQuantity = lineItem.quantity;
 
       if (oldQuantity > quantity) {
         return res.status(400).json({
@@ -74,18 +96,33 @@ export const placeOrder = async (req, res) => {
           },
         });
       }
+
       if (oldQuantity < quantity) {
-        if (existLineItem.status == "UN_COOK") {
-          existLineItem.quantity = oldQuantity + quantity;
+        //in the case update quantity of the line item, the status of the line item must be UN_COOK
+        //otherwise, the system will create a new line item with the quantity = quantity - oldQuantity
+        if (lineItem.status == "UN_COOK") {
+          lineItem.quantity += quantity - oldQuantity;
         } else {
-          const lineItem = new LineItem({
+          const newLineItem = new LineItem({
             order: orderId,
-            dishId: item.dishId,
-            quantity: quantity,
-            price: existLineItem.price,
+            dishId: lineItem.dishId,
+            quantity: quantity - oldQuantity,
+            price: lineItem.price,
             note: note,
           });
-          lineItem = await lineItem.save().catch((err) => {
+          await newLineItem.save().catch((err) => {
+            return res.status(500).json({
+              error: {
+                message: "An internal server error occurred, please try again.",
+                code: "INTERNAL_SERVER_ERROR",
+                reason: err.message,
+              },
+            });
+          });
+          //update the new line item into the order
+          Order.findByIdAndUpdate(orderId, {
+            $push: { lineItems: newLineItem._id },
+          }).catch((err) => {
             return res.status(500).json({
               error: {
                 message: "An internal server error occurred, please try again.",
@@ -97,28 +134,72 @@ export const placeOrder = async (req, res) => {
         }
       }
       if (oldNote !== note) {
-        existLineItem.note = note;
+        lineItem.note = note;
       }
-      //update order bill
-      const extraPrice = (quantity - oldQuantity) * existLineItem.price;
-      order.subTotal += extraPrice;
-    }
-    const dish = Dish.findById(item.dishId).catch((err) => {
-      return res.status(500).json({
-        error: {
-          message: "An internal server error occurred, please try again.",
-          code: "INTERNAL_SERVER_ERROR",
-          reason: err.message,
-        },
+      await lineItem.save().catch((err) => {
+        return res.status(500).json({
+          error: {
+            message: "An internal server error occurred, please try again.",
+            code: "INTERNAL_SERVER_ERROR",
+            reason: err.message,
+          },
+        });
       });
-    });
-    if (!dish) {
-      return res.status(404).json({
-        error: {
-          message: "Dish not found",
-          code: "NOT_FOUND",
-        },
+    } else {
+      const { dishId, quantity, note } = item;
+      const dish = Dish.findById(dishId).catch((err) => {
+        return res.status(500).json({
+          error: {
+            message: "An internal server error occurred, please try again.",
+            code: "INTERNAL_SERVER_ERROR",
+            reason: err.message,
+          },
+        });
+      });
+
+      if (!dish) {
+        return res.status(401).json({
+          error: {
+            message: "Dish not found",
+            code: "NOT_FOUND",
+          },
+        });
+      }
+
+      const lineItem = new LineItem({
+        order: orderId,
+        dishId: dishId,
+        quantity: quantity,
+        price: dish.price,
+        note: note,
+      });
+      await lineItem.save().catch((err) => {
+        return res.status(500).json({
+          error: {
+            message: "An internal server error occurred, please try again.",
+            code: "INTERNAL_SERVER_ERROR",
+            reason: err.message,
+          },
+        });
+      });
+      //update the new line item into the order
+      Order.findByIdAndUpdate(orderId, {
+        $push: { lineItems: lineItem._id },
+      }).catch((err) => {
+        return res.status(500).json({
+          error: {
+            message: "An internal server error occurred, please try again.",
+            code: "INTERNAL_SERVER_ERROR",
+            reason: err.message,
+          },
+        });
       });
     }
+  });
+
+  return res.status(200).json({
+    message: "Order updated successfully",
+    code: "SUCCESS",
+    data: order,
   });
 };

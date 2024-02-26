@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import formatDateTime from "../../utils/formatDateTime";
+import PropTypes from "prop-types";
 
 const OrderItem = ({
   item: { orderId, createdAt, grandTotal, orderStatus },
@@ -44,6 +45,12 @@ const OrderItem = ({
       </div>
     </Link>
   );
+};
+
+OrderItem.propTypes = {
+  item: PropTypes.object,
+  active: PropTypes.bool,
+  onClick: PropTypes.func,
 };
 
 export default OrderItem;

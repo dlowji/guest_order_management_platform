@@ -2,41 +2,23 @@
 import OverLay from "../../components/common/OverLay";
 import MenuOrder from "../menu/MenuOrder";
 import { Link, useOutletContext } from "react-router-dom";
-import MenuOrderItem from '../menu/MenuOrderItem';
-
-const orderItems = [
-  {
-    id: 1,
-    name: "Pizza 1",
-    price: 10,
-    quantity: 2,
-    note: "Extra cheese",
-    image: "./images/food-1.jpeg",
-  },
-  {
-    id: 2,
-    name: "Pizza 2",
-    price: 10,
-    quantity: 2,
-    note: "Extra spicy",
-    image: "./images/food-2.jpeg",
-  },
-  {
-    id: 3,
-    name: "Pizza 3",
-    price: 14,
-    quantity: 2,
-    image: "./images/food-3.jpeg",
-  },
-];
+import MenuOrderItem from "../menu/MenuOrderItem";
+import { useOrderState } from "../../stores/useOrderState";
 
 const MenuRightContent = () => {
-  const isActive = false;
-  const orderId = 1;
-  const tableName = "";
+  const {
+    id: orderId,
+    isActive = false,
+    onToggle,
+    tableName = "",
+  } = useOutletContext();
+
+  const orderedLineItems = useOrderState(
+    (state) => state.orderState.orderedLineItems
+  );
   return (
     <>
-      <OverLay isActive={isActive} /*onToggle={onToggle}*/></OverLay>
+      <OverLay isActive={isActive} onToggle={onToggle}></OverLay>
       <div
         className={`menu-right ${
           isActive ? "active" : ""
@@ -56,13 +38,13 @@ const MenuRightContent = () => {
                 </div>
               </div>
               <div className="menu-order-list">
-                {orderItems.length === 0 ? (
+                {orderedLineItems.length === 0 ? (
                   <div className="menu-order-empty">
                     <h3>Order is empty</h3>
                     <p>Please choose dishes to order</p>
                   </div>
                 ) : (
-                  orderItems.map((item, index) => {
+                  orderedLineItems.map((item, index) => {
                     return (
                       <MenuOrderItem
                         key={`${item.dishId}${index}`}

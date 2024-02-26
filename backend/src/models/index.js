@@ -6,6 +6,8 @@ import logModel from "./log.js";
 import categoryModel from "./Category.js";
 import dishModel from "./Dish.js";
 import severedTableModel from "./SeveredTable.js";
+import orderModel from "./Order.js";
+import lineIemModel from "./LineItem.js";
 
 export const User = userModel;
 export const Employee = employeeModel;
@@ -15,3 +17,5 @@ export const Log = logModel;
 export const Category = categoryModel;
 export const Dish = dishModel;
 export const SeveredTable = severedTableModel;
+export const Order = orderModel;
+export const LineItem = lineIemModel;

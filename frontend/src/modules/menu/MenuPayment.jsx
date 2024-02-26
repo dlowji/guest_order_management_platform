@@ -3,12 +3,7 @@ import { PaypalButton } from "../../components/buttons";
 import MenuOrderCalculate from "./MenuOrderCalculate";
 import { ORDER_METHODS } from "constants/orderMethods";
 import { toast } from "react-toastify";
-import {
-  CreateOrderActions,
-  CreateOrderData,
-  OnApproveData,
-  OnApproveActions,
-} from "@paypal/paypal-js/types/components/buttons";
+import PropTypes from "prop-types";
 
 const MenuPayment = ({ orderItems }) => {
   const [orderMethod, setOrderMethod] = React.useState("cash");
@@ -105,6 +100,10 @@ const MenuPayment = ({ orderItems }) => {
       </div>
     </div>
   );
+};
+
+MenuPayment.propTypes = {
+  orderItems: PropTypes.array,
 };
 
 export default MenuPayment;

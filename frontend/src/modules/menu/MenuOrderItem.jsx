@@ -3,35 +3,40 @@ import { useParams } from "react-router-dom";
 import { formatCurrency } from "../../utils/formatCurrency";
 // import { OrderLineItemStatusResponse } from '@constants/orderLineItemStatus';
 import Swal from "sweetalert2";
+import { useQueryClient } from "@tanstack/react-query";
+import { useOrderState } from "../../stores/useOrderState";
+import PropTypes from "prop-types";
 const MenuOrderItem = ({
-  orderLineItemId,
+  lineItemId,
   dishId,
   title,
   price = 0,
   quantity = 1,
-  note = "nothing",
+  note = "Nothing",
   image,
-  orderLineItemStatus,
+  lineItemStatus,
 }) => {
   const { id: orderId } = useParams();
 
-  if (!orderId)
+  if (!orderId) {
     return (
       <div className="text-center">
         <p className="text-2xl text-primaryff">Order id is not found</p>
       </div>
     );
+  }
 
-  const increment = (dishId, orderLineItemId) => {};
-  const decrement = (dishId, orderLineItemId) => {};
-  const updateNoteItem = (dishId, note, orderLineItemId) => {};
+  const queryClient = useQueryClient();
+  const increment = useOrderState((state) => state.increment);
+  const decrement = useOrderState((state) => state.decrement);
+  const updateNoteItem = useOrderState((state) => state.updateNoteItem);
 
   const handleIncrement = async () => {
-    increment(dishId, orderLineItemId);
+    increment(dishId, lineItemId);
   };
 
   const handleDecrement = async () => {
-    if (orderLineItemStatus !== "UN_COOK") {
+    if (lineItemStatus !== "UN_COOK") {
       Swal.fire({
         icon: "error",
         title: "Oops...",
@@ -39,7 +44,7 @@ const MenuOrderItem = ({
       });
       return;
     }
-    decrement(dishId, orderLineItemId);
+    decrement(dishId, lineItemId);
   };
 
   const handleUpdateNote = async () => {
@@ -56,8 +61,8 @@ const MenuOrderItem = ({
       },
     });
 
-    if (noteUpdate && noteUpdate !== "nothing") {
-      updateNoteItem(dishId, noteUpdate, orderLineItemId);
+    if (noteUpdate && noteUpdate !== "Nothing") {
+      updateNoteItem(dishId, noteUpdate, lineItemId);
     }
   };
 
@@ -107,6 +112,17 @@ const MenuOrderItem = ({
       </div>
     </div>
   );
+};
+
+MenuOrderItem.propTypes = {
+  lineItemId: PropTypes.string.isRequired,
+  dishId: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
+  price: PropTypes.number,
+  quantity: PropTypes.number,
+  note: PropTypes.string,
+  image: PropTypes.string,
+  lineItemStatus: PropTypes.string,
 };
 
 export default MenuOrderItem;

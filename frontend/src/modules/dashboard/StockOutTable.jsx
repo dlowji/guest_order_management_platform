@@ -1,20 +1,19 @@
-import React from "react";
 import TableStatistic from "./TableStatistic";
 import LoadingCenter from "../common/LoadingCenter";
 import StockOutItem from "./StockOutItem";
+import { useQuery } from "@tanstack/react-query";
+import kitchenApi from "../../api/kitchen";
 
-const StockoutTable = () => {
-  // const { data, isFetching } = useQuery({
-  // 	queryKey: ['stockOutItems'],
-  // 	queryFn: () => {
-  // 		return kitchenApi.getDishesByStatus('un_available');
-  // 	},
-  // });
-  const data = [];
-  const isFetching = false;
+const StockOutTable = () => {
+  const { data, isFetching } = useQuery({
+    queryKey: ["stockOutItems"],
+    queryFn: () => {
+      return kitchenApi.getDishesByStatus("un_available");
+    },
+  });
 
   return (
-    <TableStatistic title="Out of Stock" varient="stockout">
+    <TableStatistic title="Out of Stock" variant="stockout">
       {isFetching && <LoadingCenter></LoadingCenter>}
       {data?.length === 0 && (
         <div className="text-center text-gray-500 py-8">No trending dishes</div>
@@ -34,4 +33,4 @@ const StockoutTable = () => {
   );
 };
 
-export default StockoutTable;
+export default StockOutTable;

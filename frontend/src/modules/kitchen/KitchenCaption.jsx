@@ -1,8 +1,7 @@
-import React from "react";
 import Caption from "../../components/table/Caption";
 
-const KitchenCaption = (props) => {
-    return <Caption></Caption>;
+const KitchenCaption = () => {
+  return <Caption></Caption>;
 };
 
 export default KitchenCaption;

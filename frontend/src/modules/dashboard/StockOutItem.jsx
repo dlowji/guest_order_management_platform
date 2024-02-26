@@ -1,5 +1,5 @@
-import React from "react";
 import { formatCurrency } from "../../utils/formatCurrency";
+import PropTypes from "prop-types";
 
 const StockOutItem = ({ title, image, price = 0 }) => {
   return (
@@ -20,6 +20,12 @@ const StockOutItem = ({ title, image, price = 0 }) => {
       </div>
     </div>
   );
+};
+
+StockOutItem.propTypes = {
+  title: PropTypes.string.isRequired,
+  image: PropTypes.string.isRequired,
+  price: PropTypes.number.isRequired,
 };
 
 export default StockOutItem;

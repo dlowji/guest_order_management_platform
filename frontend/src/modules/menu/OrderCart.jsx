@@ -1,46 +1,29 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 import { formatCurrency } from "../../utils/formatCurrency";
-
-const orderItems = {
-  data: [
-    {
-      orderStatus: "created",
-      createdAt: Date.now(),
-      grandTotal: 1000,
-      orderId: "111111111111",
-    },
-    {
-      orderStatus: "created",
-      createdAt: Date.now(),
-      grandTotal: 2000,
-      orderId: "222222222222",
-    },
-    {
-      orderStatus: "created",
-      createdAt: Date.now(),
-      grandTotal: 3300,
-      orderId: "333333333333",
-    },
-  ],
-};
+import PropTypes from "prop-types";
+import { useOrderState } from "../../stores/useOrderState";
 
 const OrderCart = ({ children, onToggle }) => {
-  const orderId = "333333333333";
+  const { id: orderId } = useParams();
+
+  const orderedLineItems = useOrderState(
+    (state) => state.orderState.orderedLineItems
+  );
 
   const totalItems =
     React.useMemo(() => {
-      return orderItems.reduce((acc, item) => {
+      return orderedLineItems.reduce((acc, item) => {
         return acc + item.quantity;
       }, 0);
-    }, [orderItems, orderId]) || 0;
+    }, [orderedLineItems, orderId]) || 0;
 
   const totalMoney =
     React.useMemo(() => {
-      return orderItems.reduce((acc, item) => {
+      return orderedLineItems.reduce((acc, item) => {
         return acc + item.price * item.quantity;
       }, 0);
-    }, [orderItems, orderId]) || 0;
+    }, [orderedLineItems, orderId]) || 0;
 
   return (
     <>
@@ -63,6 +46,11 @@ const OrderCart = ({ children, onToggle }) => {
       {children}
     </>
   );
+};
+
+OrderCart.propTypes = {
+  children: PropTypes.any,
+  onToggle: PropTypes.func,
 };
 
 export default OrderCart;
