@@ -16,7 +16,7 @@ export const orderStatus = [
   },
 ];
 
-const OrderLineItemStatus = [
+export const OrderLineItemStatus = [
   {
     id: "UN_COOK",
     name: "Un cook",
@@ -33,12 +33,3 @@ const OrderLineItemStatus = [
     link: "COOKED",
   },
 ];
-
-const OrderLineItemStatusResponse = {
-  STOCK_OUT: "STOCK_OUT",
-  UN_COOK: "UN_COOK",
-  COOKING: "COOKING",
-  COOKED: "COOKED",
-};
-
-export default { OrderLineItemStatusResponse, OrderLineItemStatus };

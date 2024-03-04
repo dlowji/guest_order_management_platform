@@ -1,22 +1,28 @@
 import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import useOrderDetail from "../../context/useOrderDetail";
+import { useOrderDetail } from "../../context/useOrderDetail";
 import LoadingCenter from "../common/LoadingCenter";
 import TopNav from "../common/TopNav";
 import KitchenOrderLineItems from "./KitchenOrderLineItems";
-import orderApi from "../../api/orderApi";
+import orderApi from "../../api/order";
 import { useQuery } from "@tanstack/react-query";
 
 const KitchenOrder = () => {
   const { orderId } = useParams();
   const { setOrderDetail } = useOrderDetail();
 
-  const { isSuccess, data, isFetching } = useQuery({
+  const { isError, error, isSuccess, data, isFetching } = useQuery({
     queryKey: ["order", orderId],
     queryFn: () => {
-      return orderApi.getById(orderId);
+      return orderApi.getOrderById(orderId);
     },
   });
+
+  useEffect(() => {
+    if (isError) {
+      console.log(error);
+    }
+  }, [error, isError]);
 
   useEffect(() => {
     if (isSuccess) {
@@ -41,13 +47,13 @@ const KitchenOrder = () => {
         titleMain={`Order ${orderId?.slice(-4)}`}
         onBack={handleBackToPreviousPage}
         onBackToHome={() => navigate("/")}
-        subTitle={data?.data?.tableName || ""}
+        subTitle={data?.data?.tableCode || ""}
         canBack={true}
         canBackToHome={false}
       ></TopNav>
       <div className="mt-10">
         <KitchenOrderLineItems
-          items={data?.data?.orderLineItemResponseList || []}
+          items={data?.data?.lineItems || []}
         ></KitchenOrderLineItems>
       </div>
     </>

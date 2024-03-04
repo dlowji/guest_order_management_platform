@@ -1,7 +1,7 @@
 import { formatCurrency } from "../../utils/formatCurrency";
 import PropTypes from "prop-types";
 
-const TrendingItem = ({ title, value, image, price = 0 }) => {
+const TrendingItem = ({ title, totalOrderedQuantity, image, price = 0 }) => {
   return (
     <div className="flex gap-5">
       <div className="flex-shrink-0">
@@ -15,7 +15,7 @@ const TrendingItem = ({ title, value, image, price = 0 }) => {
         <h4 className="font-bold text-lg">{title}</h4>
         <div className="flex items-center">
           <h4 className="text-gray-500">Order: </h4>
-          <span className="ml-2 text-primaryff">{value}</span>
+          <span className="ml-2 text-primaryff">{totalOrderedQuantity}</span>
         </div>
         <div className="flex items-center">
           <h4 className="text-gray-500">Price: </h4>
@@ -28,7 +28,7 @@ const TrendingItem = ({ title, value, image, price = 0 }) => {
 
 TrendingItem.propTypes = {
   title: PropTypes.string.isRequired,
-  value: PropTypes.number.isRequired,
+  totalOrderedQuantity: PropTypes.number.isRequired,
   image: PropTypes.string.isRequired,
   price: PropTypes.number.isRequired,
 };

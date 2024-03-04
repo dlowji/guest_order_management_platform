@@ -1,8 +1,41 @@
 // import React from "react";
 import { Outlet } from "react-router-dom";
 import PropTypes from "prop-types";
+import { getTokenService } from "../utils/localStorage";
+import { useAuth } from "../stores/useAuth";
+import { useNavigate } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import authApi from "../api/auth";
+import { useEffect } from "react";
+import LoadingCenter from "../modules/common/LoadingCenter";
 
 const AuthenticateLayout = ({ heading, subheading }) => {
+  const token = getTokenService();
+  const setUser = useAuth((state) => state.user);
+  const navigate = useNavigate();
+  const { error, isError, isSuccess, isFetching, data } = useQuery({
+    queryKey: ["authUser", token],
+    queryFn: () => {
+      authApi.getMe();
+    },
+    enabled: !!token,
+    retry: 1,
+  });
+
+  useEffect(() => {
+    if (isError) {
+      console.log("error", error);
+    }
+
+    if (isSuccess) {
+      setUser(data);
+      navigate("/");
+    }
+  }, [data, error, isError, isSuccess, navigate, setUser]);
+
+  if (isFetching) {
+    return <LoadingCenter className="mt-10"></LoadingCenter>;
+  }
   return (
     <section className="h-screen mb-10">
       <div className="container px-6 py-12 h-full">

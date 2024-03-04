@@ -1,4 +1,4 @@
-import React from "react";
+import PropTypes from "prop-types";
 
 const StatisticItems = ({ title, value, image }) => {
   return (
@@ -20,6 +20,12 @@ const StatisticItems = ({ title, value, image }) => {
       </div>
     </div>
   );
+};
+
+StatisticItems.propTypes = {
+  title: PropTypes.string,
+  value: PropTypes.string || PropTypes.number,
+  image: PropTypes.string,
 };
 
 export default StatisticItems;

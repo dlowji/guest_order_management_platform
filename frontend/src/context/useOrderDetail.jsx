@@ -1,5 +1,5 @@
 import React from "react";
-import OrderLineItemStatusResponse from "../constants/OrderLineItemStatus";
+import PropTypes from "prop-types";
 
 const OrderDetailContext = React.createContext(null);
 
@@ -7,19 +7,18 @@ const OrderDetailProvider = (props) => {
   const [orderDetail, setOrderDetail] = React.useState(null);
   const [orderLineItems, setOrderLineItems] = React.useState([]);
   const [totalAccept, setTotalAccept] = React.useState(0);
-
   React.useEffect(() => {
-    if (orderDetail?.orderId) {
-      setOrderLineItems(orderDetail.orderLineItemResponseList || []);
+    if (orderDetail?._id) {
+      setOrderLineItems(orderDetail.lineItems || []);
     }
-  }, [orderDetail?.orderId]);
+  }, [orderDetail?._id]);
 
   const handleAcceptDish = (dishId) => {
     const newOrderLineItems = orderLineItems.map((item) => {
-      if (item.dishId === dishId) {
+      if (item.dish._id === dishId) {
         return {
           ...item,
-          orderLineItemStatus: OrderLineItemStatusResponse.COOKING,
+          status: "COOKING",
         };
       }
       return item;
@@ -32,10 +31,10 @@ const OrderDetailProvider = (props) => {
 
   const handleCancelDish = (dishId) => {
     const newOrderLineItems = orderLineItems.map((item) => {
-      if (item.dishId === dishId) {
+      if (item.dish._id === dishId) {
         return {
           ...item,
-          orderLineItemStatus: OrderLineItemStatusResponse.STOCK_OUT,
+          status: "STOCK_OUT",
         };
       }
       return item;
@@ -48,10 +47,11 @@ const OrderDetailProvider = (props) => {
 
   const handleMarkDoneDish = (dishId) => {
     const newOrderLineItems = orderLineItems.map((item) => {
-      if (item.dishId === dishId) {
+      console.log(item)
+      if (item.dish._id === dishId) {
         return {
           ...item,
-          orderLineItemStatus: OrderLineItemStatusResponse.COOKED,
+          status: "COOKED",
         };
       }
       return item;
@@ -86,4 +86,8 @@ const useOrderDetail = () => {
   return context;
 };
 
-export default { useOrderDetail, OrderDetailProvider };
+OrderDetailProvider.propTypes = {
+  children: PropTypes.node,
+};
+
+export { useOrderDetail, OrderDetailProvider };

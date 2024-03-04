@@ -1,6 +1,7 @@
 import React from "react";
+import PropTypes from "prop-types";
 
-const DropdownContext = React.createContext();
+const DropdownContext = React.createContext(null);
 
 const DropdownProvider = (props) => {
   const [show, setShow] = React.useState(false);
@@ -21,4 +22,8 @@ function useDropdown() {
   return context;
 }
 
-export default { useDropdown, DropdownProvider };
+DropdownProvider.propTypes = {
+  children: PropTypes.node,
+};
+
+export { useDropdown, DropdownProvider };

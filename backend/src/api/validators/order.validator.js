@@ -22,6 +22,7 @@ export function validatePlaceOrder(body) {
     }),
     orderedLineItems: Joi.array().items(
       Joi.object({
+        lineItemId: Joi.string().trim(),
         dishId: Joi.string().required().trim().messages({
           "any.required": "Please enter dish id",
           "string.empty": "Please enter a valid dish id",
@@ -30,7 +31,7 @@ export function validatePlaceOrder(body) {
           "any.required": "Please enter quantity",
           "number.base": "Please enter a valid quantity",
         }),
-        note: Joi.string().required.trim().messages({
+        note: Joi.string().required().trim().messages({
           "string.empty": "Please enter a valid note",
           "any.required": "Please enter note",
         }),

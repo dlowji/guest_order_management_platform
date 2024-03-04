@@ -1,5 +1,5 @@
 import { Order, LineItem } from "../../../../models/index.js";
-
+import { validateMarkDishDone } from "../../../validators/kitchen.validator.js";
 export const markDishesDone = async (req, res) => {
   //only CREATED and IN_PROCESSING orders can be updated
   const allowedOrderStatus = ["CREATED", "IN_PROCESSING"];
@@ -14,7 +14,7 @@ export const markDishesDone = async (req, res) => {
     });
   }
 
-  const { orderId, orderedLineItems } = req.body;
+  const { orderId, lineItems } = req.body;
   //check if exist order
   const order = await Order.findById(orderId).catch((err) => {
     return res.status(500).json({
@@ -47,9 +47,9 @@ export const markDishesDone = async (req, res) => {
 
   const markedDoneLineItems = [];
 
-  orderedLineItems.forEach(async (item) => {
+  lineItems.forEach(async (item) => {
     const { lineItemId } = item;
-    const existLineItem = order.lineItems.find((id) => id === lineItemId);
+    const existLineItem = order.lineItems.find((id) => id.toString() === lineItemId);
     if (!existLineItem) {
       return res.status(401).json({
         error: {
@@ -78,32 +78,41 @@ export const markDishesDone = async (req, res) => {
       });
     }
     if (lineItem.status === "COOKING") {
-      lineItem.status = "COOKED";
-      await lineItem.save().catch((err) => {
-        return res.status(500).json({
-          error: {
-            message: "An internal server error occurred, please try again.",
-            code: "INTERNAL_SERVER_ERROR",
-            reason: err.message,
-          },
+      const update = {
+        status: "COOKED",
+      };
+      await LineItem.findByIdAndUpdate(lineItemId, update, { new: true })
+        .then((updatedLineItem) => {
+          markedDoneLineItems.push(updatedLineItem);
+        })
+        .catch((err) => {
+          return res.status(500).json({
+            error: {
+              message: "An internal server error occurred, please try again.",
+              code: "INTERNAL_SERVER_ERROR",
+              reason: err.message,
+            },
+          });
         });
-      });
-      markedDoneLineItems.push(lineItem);
     }
   });
 
   //update order's last processing time
   const currentTime = Date.now();
-  order.lastProcessing = currentTime;
-  await order.save().catch((err) => {
-    return res.status(500).json({
-      error: {
-        message: "An internal server error occurred, please try again.",
-        code: "INTERNAL_SERVER_ERROR",
-        reason: err.message,
-      },
-    });
-  });
+  const update = {
+    lastProcessing: currentTime,
+  };
+  await Order.findOneAndUpdate({ _id: orderId }, update, { new: true }).catch(
+    (err) => {
+      return res.status(500).json({
+        error: {
+          message: "An internal server error occurred, please try again.",
+          code: "INTERNAL_SERVER_ERROR",
+          reason: err.message,
+        },
+      });
+    }
+  );
 
   return res.status(200).json({
     message: "Dish marked done successfully",

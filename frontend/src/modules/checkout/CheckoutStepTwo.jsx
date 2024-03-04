@@ -22,7 +22,7 @@ const CheckoutStepTwo = () => {
       return orderApi.checkoutOrder(currentOrderId);
     },
     onSuccess: (data) => {
-      if (data.code === 200) {
+      if (data.code === "SUCCESS") {
         nextStep();
       } else {
         toast.error(data.message);
@@ -59,7 +59,7 @@ const CheckoutStepTwo = () => {
   };
 
   const {
-    paymentItem: { items: orderItems },
+    paymentItems: { items: orderItems },
   } = usePaymentItems();
 
   const handleChangeMethod = (methodId) => {
@@ -111,7 +111,7 @@ const CheckoutStepTwo = () => {
   };
 
   const {
-    paymentItem: { total },
+    paymentItems: { total },
   } = usePaymentItems();
   const convertAmount = React.useMemo(() => {
     return convertToUSD(total);

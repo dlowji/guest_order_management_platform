@@ -1,6 +1,6 @@
 import http from "./http";
 import { formatCurrency } from "../utils/formatCurrency";
-import { statisticItemsDashboard } from "../constants/StatisticItemsDashboard";
+import statisticItemsDashboard from "../constants/StatisticItemsDashboard";
 
 class OrderApi {
   constructor() {
@@ -15,7 +15,6 @@ class OrderApi {
         tableId,
       });
 
-      console.log(response);
       if (response.data.error) {
         return {
           code: response.data.error.code,
@@ -35,6 +34,7 @@ class OrderApi {
 
   async getOrders(status) {
     try {
+      console.log(status);
       const response = await this.request.get(
         status ? `${this.url}?statusQ=${status}` : `${this.url}`
       );
@@ -83,16 +83,20 @@ class OrderApi {
     }
   }
 
-  async getProcessingOrderByTableId(tableId) {
+  async getCreatedAndProcessingOrderByProperties(userId, tableId) {
     try {
-      const response = await this.request.get(`${this.url}/?tableId=${tableId}?statusQ=PROCESSING`);
-      console.log(response);
+      const response = await this.request.get(
+        `${this.url}/?userId=${userId}&tableId=${tableId}&statusQ=CREATED&statusQ=IN_PROCESSING`
+      );
       if (response.data.error) {
         return {
           code: response.data.error.code,
           message: response.data.error.message,
         };
-      } else if (response.data?.code === "SUCCESS") {
+      } else if (
+        response.data.code === "SUCCESS" &&
+        response.data.data.length === 1
+      ) {
         return response.data;
       }
       return {};
@@ -112,20 +116,30 @@ class OrderApi {
       };
     }
     try {
+      console.log([...items]);
       const response = await this.request.post(`${this.url}/placed`, {
         orderId,
-        updateOrderLineItemRequests: [...items],
+        orderedLineItems: items.map((item) => {
+          const formattedItem = {
+            dishId: item.dishId,
+            quantity: item.quantity,
+            note: item.note === "" ? "Nothing" : item.note,
+          };
+
+          if (item.lineItemId) {
+            formattedItem.lineItemId = item.lineItemId;
+          }
+
+          return formattedItem;
+        }),
       });
 
-      if (response.data.code === 0) {
-        return {
-          code: 200,
-          message: "Order placed successfully",
-        };
+      if (response.data.code === "SUCCESS") {
+        return response.data;
       } else {
         return {
-          code: 400,
-          message: response.data.message || "Can't create order line items",
+          code: response.data.error.code,
+          message: response.data.error.message,
         };
       }
     } catch (error) {
@@ -146,22 +160,21 @@ class OrderApi {
     try {
       const response = await this.request.post(`${this.url}/progress`, {
         orderId,
-        progressOrderLineItemRequestList: items.map((item) => ({
-          id: item.orderLineItemId,
-          quantity: item.quantity,
-          orderLineItemStatus: item.orderLineItemStatus,
-        })),
+        progressLineItems: items.map((item) => {
+          return {
+            lineItemId: item._id,
+            quantity: item.quantity,
+            status: item.status,
+          };
+        }),
       });
 
-      if (response.data.code === 0) {
-        return {
-          code: 200,
-          message: "Order progressed successfully",
-        };
+      if (response.data.code === "SUCCESS") {
+        return response.data;
       } else {
         return {
-          code: 400,
-          message: response.data.message || "Can't progress order",
+          code: response.data.error.code,
+          message: response.data.error.message,
         };
       }
     } catch (error) {
@@ -220,73 +233,18 @@ class OrderApi {
         orderId,
       });
 
-      if (response.data.code === 0) {
-        return {
-          code: 200,
-          message: "Order checked out successfully",
-        };
+      if (response.data.code === "SUCCESS") {
+        return response.data;
       } else {
         return {
-          code: 400,
-          message: response.data.message || "Can't checkout order",
+          code: response.data.error.code,
+          message: response.data.error.message,
         };
       }
     } catch (error) {
       return {
         code: 400,
         message: "Can't checkout order",
-      };
-    }
-  }
-
-  async getBestSeller(limit = 5) {
-    try {
-      const response = await this.request.get(
-        `${this.url}/best-seller/${limit}`
-      );
-      if (response.data.code === 0) {
-        const bestSeller = response?.data?.data || [];
-        console.log("🚀 ~ OrderApi ~ getBestSeller ~ bestSeller:", bestSeller);
-        return {
-          code: 200,
-          items: bestSeller,
-        };
-      } else {
-        return {
-          code: 400,
-          message: "Can't get best seller",
-        };
-      }
-    } catch (error) {
-      return {
-        code: 400,
-        message: "Can't get best seller",
-      };
-    }
-  }
-
-  async getHistory(timestamp, filter = "day" | "month" | "year") {
-    try {
-      const response = await this.request.post(`${this.url}/filter`, {
-        timestamp,
-        filter,
-      });
-      if (response.data.code === 0) {
-        const history = response?.data?.data || [];
-        return {
-          code: 200,
-          data: history,
-        };
-      } else {
-        return {
-          code: 400,
-          message: "Can't get history",
-        };
-      }
-    } catch (error) {
-      return {
-        code: 400,
-        message: "Can't get history",
       };
     }
   }

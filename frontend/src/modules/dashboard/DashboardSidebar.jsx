@@ -1,7 +1,7 @@
 import React from "react";
 import { DropdownProvider } from "../../context/useDropdown";
 import SubMenuSidebar from "../../modules/common/SubMenuSidebar";
-import { useAuth } from "@stores/useAuth";
+import { useAuth } from "../../stores/useAuth";
 import { NavLink } from "react-router-dom";
 import { toast } from "react-toastify";
 const items = [
@@ -66,7 +66,7 @@ const DashboardSidebar = () => {
   const [currentRole, setCurrentRole] = React.useState("EMPLOYEE");
 
   const itemsFilter = React.useMemo(() => {
-    return items.filter((item) => item.permissions.includes(currentRole));
+    return items.filter((item) => item.permissions.includes(currentRole.toUpperCase()));
   }, [currentRole]);
 
   const user = useAuth((state) => state.user);

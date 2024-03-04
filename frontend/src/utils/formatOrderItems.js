@@ -1,7 +1,7 @@
 function formatOrderItems(orderItems) {
 	const orders = [...orderItems];
-	console.log(orders);
-	const formatedOrders = orders.reduce((acc, item) => {
+	const formattedOrders = orders.reduce((acc, item) => {
+		console.log(item)
 		const currentOrderItem = acc.find(
 			(order) => order.dishId === item.dishId && order.orderLineItemId === item.orderLineItemId,
 		);
@@ -14,9 +14,7 @@ function formatOrderItems(orderItems) {
 
 		return acc;
 	}, []);
-
-	console.log(formatedOrders);
-	return formatedOrders;
+	return formattedOrders;
 }
 
 export default formatOrderItems;

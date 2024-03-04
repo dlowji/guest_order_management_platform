@@ -1,19 +1,31 @@
 import React from "react";
 import useSteps from "../../hooks/useSteps";
 import Swal from "sweetalert2";
-import useOrderDetail from "../../context/useOrderDetail";
-import Badge from "../../components/badge";
-
+import { useOrderDetail } from "../../context/useOrderDetail";
+import Badge from "../../components/badge/Badge";
 import { Step, ProgressBar } from "react-step-progress-bar";
-import OrderLineItemStatus from "../../constants/OrderLineItemStatus";
 import PropTypes from "prop-types";
-
+const OrderLineItemStatus = [
+  {
+    id: "UN_COOK",
+    name: "Un cook",
+    link: "UN_COOK",
+  },
+  {
+    id: "COOKING",
+    name: "Cooking",
+    link: "COOKING",
+  },
+  {
+    id: "COOKED",
+    name: "Cooked",
+    link: "COOKED",
+  },
+];
 const KitchenOrderLineItem = ({ item }) => {
   const { currentStep, totalSteps } = useSteps(
     OrderLineItemStatus.length,
-    OrderLineItemStatus.findIndex(
-      (status) => status.id === item.OrderLineItemStatus
-    ) || 0
+    OrderLineItemStatus.findIndex((status) => status.id === item.status) || 0
   );
   const percent = React.useMemo(() => {
     return Math.ceil((currentStep / (totalSteps - 1)) * 100) || 0;
@@ -25,7 +37,7 @@ const KitchenOrderLineItem = ({ item }) => {
 
   const handleAccept = () => {
     if (!hasClick.current) {
-      handleAcceptDish(item.dishId);
+      handleAcceptDish(item.dish._id);
       hasClick.current = true;
     } else {
       Swal.fire({
@@ -38,7 +50,7 @@ const KitchenOrderLineItem = ({ item }) => {
 
   const handleCancel = () => {
     if (!hasClick.current) {
-      handleCancelDish(item.dishId);
+      handleCancelDish(item.dish._id);
       hasClick.current = true;
     } else {
       Swal.fire({
@@ -51,7 +63,7 @@ const KitchenOrderLineItem = ({ item }) => {
 
   const handleMarkDone = () => {
     if (!hasClick.current) {
-      handleMarkDoneDish(item.dishId);
+      handleMarkDoneDish(item.dish._id);
       hasClick.current = true;
     } else {
       Swal.fire({
@@ -63,7 +75,7 @@ const KitchenOrderLineItem = ({ item }) => {
   };
 
   const badgeVariant = React.useMemo(() => {
-    switch (item.OrderLineItemStatus) {
+    switch (item.status) {
       case "STOCK_OUT":
         return "dark";
       case "UN_COOK":
@@ -75,10 +87,10 @@ const KitchenOrderLineItem = ({ item }) => {
       default:
         return "";
     }
-  }, [item.OrderLineItemStatus]);
+  }, [item.status]);
 
   const badgeContent = React.useMemo(() => {
-    switch (item.OrderLineItemStatus) {
+    switch (item.status) {
       case "STOCK_OUT":
         return "Stock out";
       case "UN_COOK":
@@ -90,25 +102,25 @@ const KitchenOrderLineItem = ({ item }) => {
       default:
         return "";
     }
-  }, [item.OrderLineItemStatus]);
+  }, [item.status]);
 
   const isNewOrder = React.useMemo(() => {
-    return item.OrderLineItemStatus === "UN_COOK";
-  }, [item.OrderLineItemStatus]);
+    return item.status === "UN_COOK";
+  }, [item.status]);
 
   const isInProcessing = React.useMemo(() => {
-    return item.OrderLineItemStatus === "COOKING";
-  }, [item.OrderLineItemStatus]);
+    return item.status === "COOKING";
+  }, [item.status]);
 
   return (
     <div className="menu-order-item flex-col mb-10">
       <div className="w-full flex gap-3">
         <div className="menu-order-item-image">
-          <img srcSet={`${item.image} 4x`} alt="food" />
+          <img srcSet={`${item.dish.image} 4x`} alt="food" />
         </div>
         <div className="menu-order-item-content">
           <div className="menu-order-item-title">
-            <h4>{item.title}</h4>
+            <h4>{item.dish.title}</h4>
           </div>
           <div className="menu-order-item-note">
             <p>{item.note}</p>
@@ -117,7 +129,7 @@ const KitchenOrderLineItem = ({ item }) => {
         <div className="flex flex-col gap-3 items-center">
           <div className="flex items-center gap-3">
             <p>{item.quantity}</p>
-            <Badge varient={badgeVariant} content={badgeContent}></Badge>
+            <Badge variant={badgeVariant} content={badgeContent}></Badge>
           </div>
 
           {isNewOrder && (
@@ -181,14 +193,7 @@ const KitchenOrderLineItem = ({ item }) => {
 };
 
 KitchenOrderLineItem.propTypes = {
-  item: PropTypes.shape({
-    dishId: PropTypes.string,
-    image: PropTypes.string,
-    note: PropTypes.string,
-    title: PropTypes.string,
-    quantity: PropTypes.number,
-    OrderLineItemStatus: PropTypes.string,
-  }),
+  item: PropTypes.object,
 };
 
 export default KitchenOrderLineItem;

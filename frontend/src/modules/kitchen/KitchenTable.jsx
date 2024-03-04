@@ -9,15 +9,15 @@ import PropTypes from "prop-types";
 
 const tableHeader = [
   {
-    id: 1,
+    id: "1",
     name: "Order no",
   },
   {
-    id: 2,
+    id: "2",
     name: "Order by",
   },
   {
-    id: 3,
+    id: "3",
     name: "Duration",
   },
 ];
@@ -43,21 +43,20 @@ const KitchenTable = ({ items = [], caption = "New order" }) => {
 
         {items.map((item, index) => {
           const duration = calculateDuration(item.createdAt);
-          const formatedDuration = `${duration.hours}h ${duration.minutes}m`;
-
+          const formatterDuration = `${duration.hours}h ${duration.minutes}m`;
           return (
             <tr key={index} className="bg-white border-b">
               <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
-                {item.orderId}
+                {item._id}
               </td>
-              <td className="px-6 py-4">{item.accountName}</td>
-              <td className="px-6 py-4">{formatedDuration}</td>
+              <td className="px-6 py-4">{item.user.employee.fullName}</td>
+              <td className="px-6 py-4">{formatterDuration}</td>
               <td className="px-6 py-4 flex items-center gap-3">
                 <Button
                   type="button"
                   variant="primary"
                   className="font-medium text-white"
-                  href={`/kitchen/${item.orderId}`}
+                  href={`/kitchen/${item._id}`}
                 >
                   View
                 </Button>

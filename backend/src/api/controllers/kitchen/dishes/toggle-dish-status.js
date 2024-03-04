@@ -13,7 +13,7 @@ export const toggleDishStatus = async (req, res) => {
   });
 
   if (!dish) {
-    return res.status(404).json({
+    return res.status(401).json({
       error: {
         message: "Dish not found",
         code: "NOT_FOUND",
@@ -22,7 +22,7 @@ export const toggleDishStatus = async (req, res) => {
   }
 
   //toggle dish status
-  dish.status = dish.status === "AVAILABLE" ? "UNAVAILABLE" : "AVAILABLE";
+  dish.status = dish.status === "AVAILABLE" ? "UN_AVAILABLE" : "AVAILABLE";
 
   await dish.save().catch((err) => {
     return res.status(500).json({

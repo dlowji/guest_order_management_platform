@@ -8,7 +8,7 @@ import { usePayment } from "../../stores/usePayment";
 
 const TopNavCheckout = () => {
   const {
-    paymentItem: { tableName = "" },
+    paymentItems: { tableName = "" },
   } = usePaymentItems();
 
   const {

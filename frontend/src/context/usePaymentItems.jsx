@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 const PaymentItemsContext = React.createContext(null);
 
@@ -24,6 +25,10 @@ const usePaymentItems = () => {
   if (typeof context === "undefined" || context === null)
     throw new Error("usePaymentItems must be used within PaymentItemsProvider");
   return context;
+};
+
+PaymentItemsProvider.propTypes = {
+  children: PropTypes.node,
 };
 
 export { usePaymentItems, PaymentItemsProvider };

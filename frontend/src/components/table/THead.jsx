@@ -25,7 +25,7 @@ const THead = ({ headers, colClassName = "", children, hasAction = true }) => {
 THead.propTypes = {
   headers: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.string,
+      id: PropTypes.string || PropTypes.number,
       name: PropTypes.string,
     })
   ).isRequired,

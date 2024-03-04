@@ -25,40 +25,38 @@ const MenuPage = () => {
 
   useEffect(() => {
     if (isSuccess) {
-      console.log(orderDetailResponse);
       if (orderDetailResponse?.data?.lineItems !== undefined) {
         const orderedLineItems = [...orderDetailResponse.data.lineItems];
-        console.log("lineItems", orderedLineItems);
         if (orderedLineItems.length > 0) {
           const menuItemsOrder = orderedLineItems.map((item) => {
+            console.log(item)
             return {
-              orderLineItemId: item.orderLineItemId,
-              dishId: item.dishId,
-              title: item.title,
+              lineItemId: item._id,
+              dishId: item.dish._id,
+              title: item.dish.title,
               price: item.price,
               quantity: item.quantity,
-              image: item.image,
+              image: item.dish.image,
               note: item.note,
-              orderLineItemStatus: item.orderLineItemStatus,
+              status: item.status,
             };
           });
           setOrderState({
             orderId: orderId,
-            menuItemsOrder: [...menuItemsOrder],
+            orderedLineItems: [...menuItemsOrder],
             method: "POST",
           });
         }
       }
     }
   }, [isSuccess, orderDetailResponse, orderId, setOrderState]);
-
   return (
     <div className="menu">
       <MenuLeftContent></MenuLeftContent>
 
       {isFetching && <LoadingCenter />}
 
-      {orderId && (
+      {orderId && orderDetailResponse && (
         <OrderCart onToggle={() => handleToggleValue()}>
           <Outlet
             context={{

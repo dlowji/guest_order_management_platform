@@ -1,9 +1,8 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import useOrderDetail from "../../context/useOrderDetail";
+import { useOrderDetail } from "../../context/useOrderDetail";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
-import OrderLineItemStatusResponse from "../../constants/OrderLineItemStatus";
 import Button from "../../components/buttons/Button";
 import KitchenOrderLineItem from "./KitchenOrderLineItem";
 import PropTypes from "prop-types";
@@ -14,12 +13,12 @@ import kitchenApi from "../../api/kitchen";
 const KitchenOrderLineItems = ({ items = [] }) => {
   const { totalAccept, orderLineItems, orderDetail } = useOrderDetail();
   const isNewOrder = React.useMemo(() => {
-    return orderDetail?.orderStatus === "CREATED";
-  }, [orderDetail?.orderStatus]);
+    return orderDetail?.status === "CREATED";
+  }, [orderDetail?.status]);
 
   const isProcessing = React.useMemo(() => {
-    return orderDetail?.orderStatus === "IN_PROCESSING";
-  }, [orderDetail?.orderStatus]);
+    return orderDetail?.status === "IN_PROCESSING";
+  }, [orderDetail?.status]);
 
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -30,7 +29,7 @@ const KitchenOrderLineItems = ({ items = [] }) => {
       return;
     }
 
-    const orderId = orderDetail?.orderId;
+    const orderId = orderDetail?._id;
     if (!orderId) {
       toast.error("Order id is not found!");
       return;
@@ -47,7 +46,7 @@ const KitchenOrderLineItems = ({ items = [] }) => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         const response = await orderApi.progressOrder(orderId, orderLineItems);
-        if (response.code === 200) {
+        if (response.code === "SUCCESS") {
           toast.success("Start cooking dishes!");
           queryClient.refetchQueries(["order", orderId]);
           queryClient.refetchQueries(["order", "in_processing"]);
@@ -60,7 +59,7 @@ const KitchenOrderLineItems = ({ items = [] }) => {
   };
 
   const handleMarkDone = () => {
-    const orderId = orderDetail?.orderId;
+    const orderId = orderDetail?._id;
     if (!orderId) {
       toast.error("Order id is not found!");
       return;
@@ -80,7 +79,7 @@ const KitchenOrderLineItems = ({ items = [] }) => {
           orderId,
           orderLineItems
         );
-        if (response.code === 200) {
+        if (response.code === "SUCCESS") {
           toast.success("Order marked as done!");
           queryClient.refetchQueries(["order", "in_processing"]);
           queryClient.refetchQueries(["order", orderId]);
@@ -105,14 +104,12 @@ const KitchenOrderLineItems = ({ items = [] }) => {
   return (
     <div className="md:max-w-[800px] mx-auto mb-10">
       {items.map((item) => {
-        if (
-          item.orderLineItemStatus === OrderLineItemStatusResponse.STOCK_OUT
-        ) {
+        if (item.status === "STOCK_OUT") {
           return null;
         }
         return (
           <KitchenOrderLineItem
-            key={item.orderLineItemId}
+            key={item._id}
             item={item}
           ></KitchenOrderLineItem>
         );
