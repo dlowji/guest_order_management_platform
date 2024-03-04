@@ -11,7 +11,7 @@ const KitchenMain = () => {
   const { data: orderItems, isFetching } = useQuery({
     queryKey: ["order", status],
     queryFn: () => {
-      return orderApi.getAll(status);
+      return orderApi.getOrders(status);
     },
   });
 
@@ -22,6 +22,7 @@ const KitchenMain = () => {
   if (isFetching) {
     return <LoadingCenter></LoadingCenter>;
   }
+
 
   return (
     <div className="kitchen pb-10">

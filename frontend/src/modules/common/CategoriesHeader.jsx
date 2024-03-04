@@ -9,7 +9,6 @@ const CategoriesHeader = ({ categories, className = "" }) => {
     return location.search.replace(re, "");
   }, [location.search]);
   const [activeCategory, setActiveCategory] = React.useState(query);
-
   React.useEffect(() => {
     if (!query) {
       setActiveCategory("all");

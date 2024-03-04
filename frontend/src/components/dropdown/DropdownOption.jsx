@@ -1,9 +1,12 @@
 // import React from "react";
 import PropTypes from "prop-types";
+import { useDropdown } from "../../context/useDropdown";
 
 const DropdownOption = ({ children, onClick }) => {
+  const { setShow } = useDropdown();
   const handleClick = () => {
-    onClick();
+    onClick && onClick();
+    setShow(false);
   };
   return (
     <button

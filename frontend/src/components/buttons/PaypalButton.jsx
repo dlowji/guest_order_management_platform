@@ -24,7 +24,7 @@ const PaypalButton = ({
         currency,
       },
     });
-  }, [currency, dispatch, options, showSpinner]);
+  }, [currency, showSpinner]);
   return (
     <div className="relative">
       {isLoading && (
@@ -52,7 +52,7 @@ PaypalButton.propTypes = {
   currency: PropTypes.string,
   showSpinner: PropTypes.bool,
   style: PropTypes.object,
-  amount: PropTypes.number.isRequired,
+  amount: PropTypes.string.isRequired,
   className: PropTypes.string,
   createOrder: PropTypes.func.isRequired,
   onApprove: PropTypes.func.isRequired,

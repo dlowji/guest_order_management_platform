@@ -8,19 +8,25 @@ import orderApi from "../../api/order";
 
 const HistoryDetail = () => {
   const { orderId } = useParams();
-  const [orderLineItems, setOrderLineItems] = React.useState([]);
-  console.log("🚀 ~ orderLineItems:", orderLineItems);
-  const { isSuccess, data, isFetching } = useQuery({
+  const [orderedLineItems, setOrderedLineItems] = React.useState([]);
+  const { isError, error, isSuccess, data, isFetching } = useQuery({
     queryKey: ["order", orderId],
     queryFn: () => orderApi.getOrderById(orderId),
   });
   useEffect(() => {
+    if (isError) {
+      console.log(error);
+    }
+  }, [error, isError]);
+
+  useEffect(() => {
     if (isSuccess) {
+      console.log(data);
       if (data.code === "SUCCESS") {
-        setOrderLineItems(data.data?.orderLineItemResponseList || []);
+        setOrderedLineItems(data.data?.lineItems || []);
       }
     }
-  }, []);
+  }, [isSuccess]);
 
   if (!orderId) {
     return (
@@ -54,13 +60,11 @@ const HistoryDetail = () => {
         <div className="flex flex-col gap-3 mt-5">
           <div className="flex items-center justify-between">
             <span className="font-semibold">Order ID:</span>
-            <span className="text-slate-500">
-              {data?.data?.orderId.slice(-4)}
-            </span>
+            <span className="text-slate-500">{data?.data?._id.slice(-4)}</span>
           </div>
           <div className="flex items-center justify-between">
             <span className="font-semibold">Status:</span>
-            <span className="text-slate-500">{data?.data?.orderStatus}</span>
+            <span className="text-slate-500">{data?.data?.status}</span>
           </div>
           <div className="flex items-center justify-between">
             <span className="font-semibold">Order date:</span>
@@ -74,7 +78,9 @@ const HistoryDetail = () => {
           </div>
           <div className="flex items-center justify-between">
             <span className="font-semibold">Order By:</span>
-            <span className="text-slate-500">{data?.data?.accountName}</span>
+            <span className="text-slate-500">
+              {data?.data?.user.employee.fullName}
+            </span>
           </div>
         </div>
       </div>
@@ -83,7 +89,7 @@ const HistoryDetail = () => {
         <h4 className="font-semibold text-2xl">Order line items</h4>
         {isFetching && <LoadingCenter></LoadingCenter>}
         <OrderReceipt
-          orderItems={orderLineItems}
+          orderItems={orderedLineItems}
           orderId={orderId}
           discount={data?.data?.discount || 0}
           tax={data?.data?.tax}

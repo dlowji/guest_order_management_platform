@@ -29,33 +29,27 @@ const CheckoutStepOne = () => {
   };
 
   const {
-    setPaymentItem,
-    paymentItem: { items },
+    setPaymentItems,
+    paymentItems: { items },
   } = usePaymentItems();
 
   const { orderId, step } = useParams();
   const [orderLineItems, setOrderLineItems] = React.useState(items || []);
-  console.log("🚀 ~ orderLineItems:", orderLineItems);
   const { isSuccess, data, isFetching } = useQuery({
     queryKey: ["order", orderId],
-    queryFn: () => orderApi.getById(orderId),
-    onSuccess: (data) => {
-      if (data.code === 200) {
-        setOrderLineItems(data.data?.orderLineItemResponseList || []);
-        setPaymentItem({
-          items: data.data?.orderLineItemResponseList || [],
-          total: data.data?.grandTotal || 0,
-          tableName: data.data?.tableName || "",
-        });
-      }
-    },
+    queryFn: () => orderApi.getOrderById(orderId),
   });
 
   useEffect(() => {
     if (isSuccess) {
-      console.log(data);
+      setOrderLineItems(data.data?.lineItems || []);
+      setPaymentItems({
+        items: data.data?.lineItems || [],
+        total: data.data?.grandTotal || 0,
+        tableName: data.data?.table.code || "",
+      });
     }
-  }, [isSuccess, data]); 
+  }, [isSuccess, data, setPaymentItems]);
 
   if (!orderId) {
     return (
@@ -84,8 +78,8 @@ const CheckoutStepOne = () => {
         <OrderReceipt
           orderItems={orderLineItems}
           orderId={orderId}
-          // discount={order?.data?.discount || 0}
-          // tax={order?.data?.tax}
+          discount={data?.data?.discount || 0}
+          tax={data?.data?.tax}
         ></OrderReceipt>
       </div>
       <Button variant="primary" type="button" onClick={handleMoveToNextStep}>

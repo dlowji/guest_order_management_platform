@@ -1,7 +1,8 @@
 // import React from "react";
 import PropTypes from "prop-types";
+import { useDropdown } from "../../context/useDropdown";
 const DropdownList = ({ children, classNameBody }) => {
-  const show = true;
+  const { show } = useDropdown();
   return (
     <>
       {show && (

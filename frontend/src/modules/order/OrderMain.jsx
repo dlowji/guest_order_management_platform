@@ -10,7 +10,7 @@ import orderApi from "../../api/order";
 
 const OrderMain = () => {
   const [activeOrder, setActiveOrder] = React.useState("#456644");
-  const { q: status } = useQueryString();
+  const { statusQ: status } = useQueryString();
   const { data: orderList, isFetching } = useQuery({
     queryKey: ["order", status],
     queryFn: () => {
@@ -25,7 +25,7 @@ const OrderMain = () => {
       ></CategoriesHeader>
       <MainContentHeader
         title="Current orders"
-        quantity="10 orders"
+        quantity={`${orderList?.data?.length || 0} orders`}
       ></MainContentHeader>
       <div className="order-list">
         {isFetching && <LoadingCenter />}
@@ -39,13 +39,13 @@ const OrderMain = () => {
         )}
 
         {orderList?.data &&
-          orderList.data.map((item, index) => {
+          orderList.data.map((item) => {
             return (
               <OrderItem
-                key={index}
+                key={item._id}
                 item={item}
-                active={activeOrder === item.orderId}
-                onClick={() => setActiveOrder(item.orderId)}
+                active={activeOrder === item._id}
+                onClick={() => setActiveOrder(item._id)}
               ></OrderItem>
             );
           })}

@@ -10,7 +10,7 @@ import Swal from "sweetalert2";
 
 const TableItem = ({
   item: {
-    _id: tableId,
+    id: tableId,
     seats = 2,
     tableStatus = "FREE",
     title = "Table 1",
@@ -35,7 +35,7 @@ const TableItem = ({
     mutationFn: (userId) => orderApi.createOrder(userId, tableId),
     onSuccess: (response) => {
       if (response.code === "SUCCESS") {
-        navigate(`menu/order/${response.data._id}`);
+        navigate(`/menu/order/${response.data._id}`);
       } else {
         toast.error(response.message);
       }
@@ -46,16 +46,26 @@ const TableItem = ({
   });
 
   const { mutate: chooseTableOccupied } = useMutation({
-    mutationFn: () => orderApi.getProcessingOrderByTableId(tableId),
+    mutationFn: () =>
+      orderApi.getCreatedAndProcessingOrderByProperties(
+        currentUser._id,
+        tableId
+      ),
     onSuccess: (response) => {
+      console.log(response.code === "SUCCESS");
+      console.log(response.data[0]._id);
       if (response.code === "SUCCESS") {
-        navigate(`/menu/order/${response.data._id}`);
+        navigate(`/menu/order/${response.data[0]._id}`);
+      } else if (Object.keys(response).length === 0) {
+        toast.error(
+          "This table is being severed by another staff, please choose another table"
+        );
       } else {
         toast.error(response.message);
       }
     },
     onError: () => {
-      toast.error("This table is occupied, please choose another table");
+      toast.error("The platform is facing some issues, please try again later");
     },
   });
 
@@ -136,7 +146,7 @@ const TableItem = ({
 
 TableItem.propTypes = {
   item: PropTypes.shape({
-    _id: PropTypes.string,
+    id: PropTypes.string,
     seats: PropTypes.number,
     tableStatus: PropTypes.string,
     title: PropTypes.string,

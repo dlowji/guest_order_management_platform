@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import {LineItem} from "./index.js";
+import { LineItem } from "./index.js";
 const { Schema, model } = mongoose;
 
 const TAX_RATE = 0.1;
@@ -66,23 +66,25 @@ const orderSchema = new Schema(
   { timestamps: true }
 );
 
-orderSchema.pre("save", (next) => {
-  const totalLineItemPrice = this.lineItems.reduce(async (acc, currentId) => {
-    await LineItem.find({
+orderSchema.pre("findOneAndUpdate", async function (next) {
+  const docToUpdate = await this.model.findOne(this.getQuery());
+  let totalLineItemsPrice = 0;
+  for (const currentId of docToUpdate.lineItems) {
+    const item = await LineItem.findOne({
       _id: currentId,
       status: { $nin: ["STOCK_OUT", "UN_COOK"] },
-    })
-      .then((item) => {
-        acc += item.price * item.quantity;
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, 0);
-  this.subTotal = totalLineItemPrice;
-  this.tax = this.subTotal * TAX_RATE;
-  this.total = this.subTotal + this.tax;
-  this.grandTotal = this.total - this.discount - this.itemDiscount;
+    }).catch((err) => {
+      console.log(err);
+    });
+    if (item) {
+      totalLineItemsPrice += item.price * item.quantity;
+    }
+  }
+  docToUpdate.subTotal = totalLineItemsPrice;
+  docToUpdate.tax = docToUpdate.subTotal * TAX_RATE;
+  docToUpdate.total = docToUpdate.subTotal + docToUpdate.tax;
+  docToUpdate.grandTotal =
+    docToUpdate.total - docToUpdate.discount - docToUpdate.itemDiscount;
   next();
 });
 

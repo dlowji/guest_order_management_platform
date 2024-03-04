@@ -1,9 +1,8 @@
-import React from "react";
 import { useEffect } from "react";
 
 const useClickOutside = (refs, handler) => {
   useEffect(() => {
-    const handleClickOutside = () => {
+    const handleClickOutside = (event) => {
       if (!handler) return;
       // Clicked browser's scrollbar
       if (

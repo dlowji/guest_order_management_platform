@@ -22,8 +22,9 @@ const TableStatistic = ({ title, children, variant }) => {
 };
 
 TableStatistic.propTypes = {
-  title: PropTypes.string.isRequired,
-  children: PropTypes.node.isRequired,
+  title: PropTypes.string,
+  children: PropTypes.node,
+  //variant is a string that can be either "trending" or "stockOut"
   variant: PropTypes.string,
 };
 

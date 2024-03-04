@@ -16,6 +16,7 @@ const MenuRightContent = () => {
   const orderedLineItems = useOrderState(
     (state) => state.orderState.orderedLineItems
   );
+  console.log(orderedLineItems);
   return (
     <>
       <OverLay isActive={isActive} onToggle={onToggle}></OverLay>

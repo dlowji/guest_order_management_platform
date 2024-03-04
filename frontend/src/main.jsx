@@ -16,7 +16,7 @@ import OrderPage from "./pages/OrderPage.jsx";
 import MenuPage from "./pages/MenuPage.jsx";
 import MenuRightContent from "./modules/common/MenuRightContent.jsx";
 import KitchenPage from "./pages/KitchenPage.jsx";
-import OrderDetailProvider from "./context/useOrderDetail";
+import { OrderDetailProvider } from "./context/useOrderDetail";
 import KitchenOrder from "./modules/kitchen/KitchenOrder.jsx";
 import HistoryDetail from "./modules/history/HistoryDetail.jsx";
 import HistoryPage from "./pages/HistoryPage.jsx";

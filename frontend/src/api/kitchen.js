@@ -54,68 +54,63 @@ class KitchenApi {
     }
   }
 
-   async toggleDishStatus(id) {
+  async toggleDishStatus(id) {
     try {
-        const response = await this.request.post(`${this.url}/toggle/${id}`);
+      const response = await this.request.post(`${this.url}/toggle/${id}`);
 
-        if (response.data.code === 0) {
-            return {
-                code: 200,
-                message: response.data.message,
-            };
-        }
+      if (response.data.code === "SUCCESS") {
+        return response.data;
+      } else {
         return {
-            code: 500,
-            message: response.data.message,
+          code: response.data.error.code,
+          message: response.data.error.message,
         };
+      }
     } catch (error) {
-        console.log(error);
-        return {
-            code: 500,
-            message: 'Something went wrong',
-        };
+      console.log(error);
+      return {
+        code: 500,
+        message: "Something went wrong",
+      };
     }
-}
+  }
 
- async markDoneOrder(orderId, items) {
+  async markDoneOrder(orderId, items) {
     if (!orderId) {
-        return {
-            code: 400,
-            message: "Can't mark done order",
-        };
+      return {
+        code: 400,
+        message: "Can't mark done order",
+      };
     }
     try {
-        const response = await this.request.post(`${this.url}/mark-done`, {
-            orderId,
-            markDoneOrderLineItemRequests: items
-                .filter((item) => {
-                    return item.orderLineItemStatus === "COOKED";
-                })
-                .map((item) => {
-                    return {
-                        id: item.orderLineItemId,
-                    };
-                }),
-        });
+      const response = await this.request.post(`${this.url}/mark-done`, {
+        orderId,
+        lineItems: items
+          .filter((item) => {
+            return item.status === "COOKED";
+          })
+          .map((item) => {
+            return {
+              lineItemId: item._id,
+            };
+          }),
+      });
 
-        if (response.data.code === 0) {
-            return {
-                code: 200,
-                message: 'Order marked done successfully',
-            };
-        } else {
-            return {
-                code: 400,
-                message: response.data.message || "Can't mark done order",
-            };
-        }
-    } catch (error) {
+      if (response.data.code === "SUCCESS") {
+        return response.data;
+      } else {
         return {
-            code: 400,
-            message: "Can't mark done order",
+          code: response.data.error.code,
+          message: response.data.error.message,
         };
+      }
+    } catch (error) {
+      return {
+        code: 400,
+        message: "Can't mark done order",
+      };
     }
-}
+  }
 }
 
 const kitchenApi = new KitchenApi();

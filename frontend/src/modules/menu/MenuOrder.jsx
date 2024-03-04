@@ -22,7 +22,7 @@ const MenuOrder = () => {
       return orderApi.updateOrderedLineItems(id, orderItems);
     },
     onSuccess: (data) => {
-      if (data.code === 200) {
+      if (data.code === "SUCCESS") {
         queryClient.invalidateQueries(["orderDetail", id]);
         Swal.fire(
           "Ordered!",

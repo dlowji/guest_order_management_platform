@@ -2,7 +2,7 @@ import LoadingCenter from "../common/LoadingCenter";
 import HistoryTable from "./HistoryTable";
 import PropTypes from "prop-types";
 import { useQuery } from "@tanstack/react-query";
-import orderApi from "../../api/order";
+import historyApi from "../../api/history";
 
 const HistoryMain = ({ selectedDate, filter }) => {
   const { data, isFetching } = useQuery({
@@ -14,14 +14,14 @@ const HistoryMain = ({ selectedDate, filter }) => {
       }
 
       const timeStamp = dateObj.getTime();
-      return orderApi.getHistory(timeStamp / 1000, filter);
+      return historyApi.getHistory(timeStamp / 1000, filter);
     },
   });
 
   if (isFetching) {
     return <LoadingCenter></LoadingCenter>;
   }
-
+  console.log(data);
   return (
     <div className="history pb-10">
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg xl:max-w-[1920px] xl:mx-10 mx-auto mt-10">

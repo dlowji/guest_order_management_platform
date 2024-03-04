@@ -46,3 +46,21 @@ export function validateCreateDish(body) {
   });
   return schema.validate(body);
 }
+
+export function validateMarkDishDone(body) {
+  const schema = Joi.object({
+    orderId: Joi.string().required().trim().messages({
+      "any.required": "Please enter order id",
+      "string.empty": "Please enter a valid order id",
+    }),
+    lineItems: Joi.array().items(
+      Joi.object({
+        lineItemId: Joi.string().required().trim().messages({
+          "any.required": "Please enter line item id",
+          "string.empty": "Please enter a valid line item id",
+        }),
+      })
+    ),
+  });
+  return schema.validate(body);
+}

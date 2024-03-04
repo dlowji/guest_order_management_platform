@@ -21,7 +21,7 @@ const MenuLeftContent = () => {
   } = useQuery({
     queryKey: ["menuItems", category],
     queryFn: () => {
-      return kitchenApi.getMenuItems(category);
+      return kitchenApi.getDishes(category);
     },
   });
 
@@ -50,8 +50,8 @@ const MenuLeftContent = () => {
             <MenuList>
               {menuItems.map((item) => (
                 <MenuItem
-                  key={item.dishId}
-                  id={item.dishId}
+                  key={item._id}
+                  id={item._id}
                   image={item.image}
                   title={item.title}
                   price={item.price}

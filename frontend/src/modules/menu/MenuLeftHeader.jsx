@@ -19,8 +19,8 @@ const MenuLeftHeader = () => {
       if (data.length > 0) {
         const formattedCategories = data.map((item) => {
           return {
-            id: item.categoryId,
-            name: item.categoryName,
+            id: item._id,
+            name: item.name,
             icon: item.icon,
             link: item.link,
           };

@@ -13,7 +13,7 @@ export const getDishById = async (req, res) => {
   });
 
   if (!dish) {
-    return res.status(404).json({
+    return res.status(401).json({
       error: {
         message: "Dish not found",
         code: "NOT_FOUND",

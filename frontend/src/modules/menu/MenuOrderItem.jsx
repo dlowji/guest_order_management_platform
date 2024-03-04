@@ -29,7 +29,7 @@ const MenuOrderItem = ({
   const queryClient = useQueryClient();
   const increment = useOrderState((state) => state.increment);
   const decrement = useOrderState((state) => state.decrement);
-  const updateNoteItem = useOrderState((state) => state.updateNoteItem);
+  const updateNoteItem = useOrderState((state) => state.updateNote);
 
   const handleIncrement = async () => {
     increment(dishId, lineItemId);
@@ -115,7 +115,7 @@ const MenuOrderItem = ({
 };
 
 MenuOrderItem.propTypes = {
-  lineItemId: PropTypes.string.isRequired,
+  lineItemId: PropTypes.string,
   dishId: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   price: PropTypes.number,

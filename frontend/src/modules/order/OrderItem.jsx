@@ -4,12 +4,12 @@ import formatDateTime from "../../utils/formatDateTime";
 import PropTypes from "prop-types";
 
 const OrderItem = ({
-  item: { orderId, createdAt, grandTotal, orderStatus },
+  item: { _id: orderId, createdAt, grandTotal, status },
   active = false,
   onClick,
 }) => {
   const statusColor = React.useMemo(() => {
-    switch (orderStatus.toUpperCase()) {
+    switch (status.toUpperCase()) {
       case "CREATED":
         return "created";
       case "IN_PROCESSING":
@@ -19,7 +19,7 @@ const OrderItem = ({
       default:
         return "completed";
     }
-  }, [orderStatus, active]);
+  }, [status, active]);
 
   return (
     <Link
@@ -40,7 +40,7 @@ const OrderItem = ({
         </div>
         <div className="order-item-bottom-right">
           <div className="order-item-price">${grandTotal}</div>
-          <div className={`order-item-status`}>{orderStatus}</div>
+          <div className={`order-item-status`}>{status}</div>
         </div>
       </div>
     </Link>

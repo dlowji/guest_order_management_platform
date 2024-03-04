@@ -9,19 +9,19 @@ import Button from "../../components/buttons/Button";
 import PropTypes from "prop-types";
 const historyTableHeader = [
   {
-    id: 1,
+    id: "1",
     name: "Order no",
   },
   {
-    id: 2,
+    id: "2",
     name: "Order by",
   },
   {
-    id: 3,
+    id: "3",
     name: "Grand total",
   },
   {
-    id: 4,
+    id: "4",
     name: "Duration",
   },
 ];
@@ -50,9 +50,9 @@ const HistoryTable = ({ items = [], caption = "Order completed" }) => {
           return (
             <tr key={index} className="bg-white border-b">
               <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
-                {item.orderId}
+                {item._id}
               </td>
-              <td className="px-6 py-4">{item.accountName}</td>
+              <td className="px-6 py-4">{item.user.employee.fullName}</td>
               <td className="px-6 py-4">{formatCurrency(item.grandTotal)}</td>
               <td className="px-6 py-4">{formattedDuration}</td>
               <td className="px-6 py-4 flex items-center gap-3">
@@ -60,7 +60,7 @@ const HistoryTable = ({ items = [], caption = "Order completed" }) => {
                   type="button"
                   variant="primary"
                   className="font-medium text-white"
-                  href={`/history/${item.orderId}`}
+                  href={`/history/${item._id}`}
                 >
                   View
                 </Button>

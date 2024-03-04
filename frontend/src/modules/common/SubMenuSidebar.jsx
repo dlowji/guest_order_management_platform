@@ -1,35 +1,39 @@
 import React from "react";
-import useDropdown from "../../context/useDropdown";
+import { useDropdown } from "../../context/useDropdown";
 import { Link, useNavigate } from "react-router-dom";
 import useClickOutside from "../../hooks/useClickOutside";
 import Swal from "sweetalert2";
 import { DropdownList, DropdownOption } from "../../components/dropdown";
+import { useAuth } from "../../stores/useAuth";
+import { useMutation } from "@tanstack/react-query";
+import authApi from "../../api/auth";
+import { removeTokenService } from "../../utils/localStorage";
 
 const SubMenuSidebar = () => {
   const { handleToggleDropdown, setShow } = useDropdown();
   const navigate = useNavigate();
-  const refDropdown = React.useRef < HTMLAnchorElement > null;
-  //   const removeUser = useAuth((state) => state.removeUser);
+  const refDropdown = React.useRef(null);
+  const removeUser = useAuth((state) => state.removeUser);
   useClickOutside([refDropdown], () => setShow(false));
-  //   const { mutate: signOut } = useMutation({
-  //     mutationFn: async () => {
-  //       return await authApi.logout();
-  //     },
-  //     onSuccess: (data) => {
-  //       if (data.status === 200) {
-  //         Swal.fire({
-  //           title: "Success!",
-  //           text: "You have ended this shift. See you again!",
-  //           icon: "success",
-  //           confirmButtonText: "Ok",
-  //         }).then(() => {
-  //           removeUser();
-  //           removeTokenService();
-  //           navigate("/login");
-  //         });
-  //       }
-  //     },
-  //   });
+  const { mutate: signOut } = useMutation({
+    mutationFn: async () => {
+      return await authApi.logout();
+    },
+    onSuccess: (data) => {
+      if (data.status === 200) {
+        Swal.fire({
+          title: "Success!",
+          text: "You have ended this shift. See you again!",
+          icon: "success",
+          confirmButtonText: "Ok",
+        }).then(() => {
+          removeUser();
+          removeTokenService();
+          navigate("/login");
+        });
+      }
+    },
+  });
 
   const handleSignOut = () => {
     Swal.fire({
@@ -42,7 +46,7 @@ const SubMenuSidebar = () => {
       confirmButtonText: "Yes, end shift!",
     }).then((result) => {
       if (result.isConfirmed) {
-        // signOut();
+        signOut();
       }
     });
   };

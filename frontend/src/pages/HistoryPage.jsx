@@ -39,17 +39,17 @@ const options = {
 };
 const HistoryPage = () => {
   const [show, setShow] = React.useState(false);
-  const [selectedDate, setSelectedDate] = React.useState(null);
+  const [selectedDate, setSelectedDate] = React.useState("");
   const [filter, setFilter] = React.useState("day");
   const handleChange = (selectedDate) => {
-    setSelectedDate(selectedDate);
+    setSelectedDate(selectedDate.toString());
   };
   const handleClose = (state) => {
     setShow(state);
   };
 
   const handleFilterChange = (e) => {
-    // setFilter(e.target.value as 'day' | 'month' | 'year');
+    setFilter(e.target.value);
   };
 
   return (

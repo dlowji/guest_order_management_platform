@@ -1,4 +1,4 @@
-import React from "react";
+import PropTypes from "prop-types";
 
 const TableHeaderSection = ({ header, totalItems = 0 }) => {
   return (
@@ -7,6 +7,11 @@ const TableHeaderSection = ({ header, totalItems = 0 }) => {
       <span className="text-lg">{`(${totalItems})`}</span>
     </div>
   );
+};
+
+TableHeaderSection.propTypes = {
+  header: PropTypes.string,
+  totalItems: PropTypes.number,
 };
 
 export default TableHeaderSection;

@@ -1,4 +1,4 @@
-import React from "react";
+import PropTypes from "prop-types";
 import Button from "../../components/buttons/Button";
 
 const TopNav = ({
@@ -41,6 +41,15 @@ const TopNav = ({
       </div>
     </div>
   );
+};
+
+TopNav.propTypes = {
+  onBack: PropTypes.func,
+  onBackToHome: PropTypes.func,
+  subTitle: PropTypes.string,
+  titleMain: PropTypes.string,
+  canBack: PropTypes.bool,
+  canBackToHome: PropTypes.bool,
 };
 
 export default TopNav;

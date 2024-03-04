@@ -16,7 +16,7 @@ export const createOrder = async (req, res) => {
   const { userId, tableId } = req.body;
 
   //check if user exists
-  const existUser = User.exists({ _id: userId }).catch((err) => {
+  const existUser = await User.exists({ _id: userId }).catch((err) => {
     return res.status(500).json({
       error: {
         message: "An internal server error occurred, please try again.",
@@ -35,7 +35,7 @@ export const createOrder = async (req, res) => {
   }
 
   //check if table exists
-  const existTable = SeveredTable.findById(tableId).catch((err) => {
+  const existTable = await SeveredTable.findById(tableId).catch((err) => {
     return res.status(500).json({
       error: {
         message: "An internal server error occurred, please try again.",
@@ -64,20 +64,6 @@ export const createOrder = async (req, res) => {
     });
   }
 
-  //update table status
-  const update = {
-    tableStatus: "OCCUPIED",
-  };
-  await SeveredTable.findByIdAndUpdate(tableId, update).catch((err) => {
-    return res.status(500).json({
-      error: {
-        message: "An internal server error occurred, please try again.",
-        code: "INTERNAL_SERVER_ERROR",
-        reason: err.message,
-      },
-    });
-  });
-
   let order = new Order({
     user: userId,
     table: tableId,
@@ -86,20 +72,36 @@ export const createOrder = async (req, res) => {
     grandTotal: 0,
   });
 
-  order = await order.save().catch((err) => {
-    return res.status(500).json({
-      error: {
-        message: "An internal server error occurred, please try again.",
-        code: "INTERNAL_SERVER_ERROR",
-        reason: err.message,
-      },
+  await order
+    .save()
+    .then(async (order) => {
+      //update table status
+      const update = {
+        tableStatus: "OCCUPIED",
+      };
+      await SeveredTable.findByIdAndUpdate(tableId, update).catch((err) => {
+        return res.status(500).json({
+          error: {
+            message: "An internal server error occurred, please try again.",
+            code: "INTERNAL_SERVER_ERROR",
+            reason: err.message,
+          },
+        });
+      });
+
+      return res.status(201).json({
+        message: "Order created successfully",
+        code: "SUCCESS",
+        data: order,
+      });
+    })
+    .catch((err) => {
+      return res.status(500).json({
+        error: {
+          message: "An internal server error occurred, please try again.",
+          code: "INTERNAL_SERVER_ERROR",
+          reason: err.message,
+        },
+      });
     });
-  });
-
-
-  return res.status(201).json({
-    message: "Order created successfully",
-    code: "SUCCESS",
-    data: order,
-  });
 };
