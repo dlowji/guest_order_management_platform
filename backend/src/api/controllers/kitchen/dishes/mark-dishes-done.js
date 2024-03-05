@@ -49,7 +49,9 @@ export const markDishesDone = async (req, res) => {
 
   lineItems.forEach(async (item) => {
     const { lineItemId } = item;
-    const existLineItem = order.lineItems.find((id) => id.toString() === lineItemId);
+    const existLineItem = order.lineItems.find(
+      (id) => id.toString() === lineItemId
+    );
     if (!existLineItem) {
       return res.status(401).json({
         error: {
@@ -120,3 +122,62 @@ export const markDishesDone = async (req, res) => {
     data: markedDoneLineItems,
   });
 };
+
+/**
+ * @swagger
+ * /kitchen/dishes/mark-done:
+ *    post:
+ *      summary: Mark dishes done.
+ *      requestBody:
+ *        description: Order's information for the update.
+ *        required: true
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                orderId:
+ *                  type: string
+ *                lineItems:
+ *                  type: array
+ *                  items:
+ *                    properties:
+ *                      lineItemId:
+ *                        type: string
+ *      parameters:
+ *        - in: header
+ *          name: Authorization
+ *          schema:
+ *            type: string
+ *          description: Put access token here
+ *      tags:
+ *        - Kitchen
+ *      responses:
+ *        "200":
+ *          description: Dish marked done successfully.
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  code:
+ *                    type: string
+ *                  message:
+ *                    type: string
+ *                  data:
+ *                    type: array
+ *                    items:
+ *                      $ref: '#/components/schemas/LineItem'
+ *        "401":
+ *          description: Invalid token.
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      $ref: '#/components/schemas/Result'
+ *        "500":
+ *          description: An internal server error occurred, please try again.
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      $ref: '#/components/schemas/Result'
+ */

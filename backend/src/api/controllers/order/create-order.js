@@ -105,3 +105,56 @@ export const createOrder = async (req, res) => {
       });
     });
 };
+
+/**
+ * @swagger
+ * /orders/:
+ *    post:
+ *      summary: Create new order.
+ *      requestBody:
+ *        description: Order's information for the creation.
+ *        required: true
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                userId:
+ *                  type: string
+ *                tableId:
+ *                  type: string
+ *      parameters:
+ *        - in: header
+ *          name: Authorization
+ *          schema:
+ *            type: string
+ *          description: Put access token here
+ *      tags:
+ *        - Order
+ *      responses:
+ *        "200":
+ *          description: Order created successfully.
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      type: object
+ *                      properties:
+ *                          code:
+ *                              type: string
+ *                          message:
+ *                              type: string
+ *                          data:
+ *                              $ref: '#/components/schemas/Order'
+ *        "401":
+ *          description: Invalid token.
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      $ref: '#/components/schemas/Result'
+ *        "500":
+ *          description: An internal server error occurred, please try again.
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      $ref: '#/components/schemas/Result'
+ */

@@ -57,3 +57,58 @@ export const createCategory = async (req, res) => {
     data: category,
   });
 };
+
+/**
+ * @swagger
+ * /kitchen/categories/create:
+ *    post:
+ *      summary: Create new category
+ *      requestBody:
+ *        description: Category's information for the creation
+ *        required: true
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                name:
+ *                  type: string
+ *                icon:
+ *                  type: string
+ *                link:
+ *                  type: string
+ *      parameters:
+ *        - in: header
+ *          name: Authorization
+ *          schema:
+ *            type: string
+ *          description: Put access token here
+ *      tags:
+ *        - Kitchen
+ *      responses:
+ *        "200":
+ *          description: Category created successfully.
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      type: object
+ *                      properties:
+ *                          code:
+ *                              type: string
+ *                          message:
+ *                              type: string
+ *                          data:
+ *                              $ref: '#/components/schemas/Category'
+ *        "401":
+ *          description: Invalid token.
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      $ref: '#/components/schemas/Result'
+ *        "500":
+ *          description: An internal server error occurred, please try again.
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      $ref: '#/components/schemas/Result'
+ */

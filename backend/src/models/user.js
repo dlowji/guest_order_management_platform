@@ -56,40 +56,23 @@ export default User;
  *     User:
  *       type: object
  *       properties:
- *         email:
- *           type: string
- *         name:
- *           type: string
+ *         _id:
+ *          type: string
  *         username:
- *           type: string
- *         type:
- *           type: string
- *           enum: ['user', 'admin', 'creator', 'reader']
- *         language:
- *           type: string
- *           enum: ['tr', 'en']
- *         isPremium:
- *           type: boolean
- *         gender:
- *           type: string
- *           enum: ['male', 'female', 'other']
- *         countryCode:
- *           type: string
- *         timezone:
- *           type: number
- *         birthDate:
- *           type: string
+ *          type: string
+ *         password:
+ *          type: string
+ *         lastLogin:
+ *          type: string
  *         photoUrl:
- *           type: string
+ *          type: string
+ *         language:
+ *          type: string
  *         isActivated:
- *           type: boolean
- *         isVerified:
- *           type: boolean
- *         deviceId:
- *           type: string
- *         platform:
- *           type: string
- *           enum: ['Android', 'IOS']
+ *          type: boolean
  *         deletedAt:
- *           type: string
+ *          type: string
+ *         employee:
+ *          $ref: "#/components/schemas/Employee"
+ *
  */

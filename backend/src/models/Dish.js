@@ -42,3 +42,31 @@ const dishSchema = new Schema(
 
 const Dish = model("Dish", dishSchema);
 export default Dish;
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Dish:
+ *       type: object
+ *       properties:
+ *        _id:
+ *          type: string
+ *        title:
+ *          type: string
+ *        image:
+ *          type: string
+ *        price:
+ *          type: number
+ *        summary:
+ *          type: string
+ *        status:
+ *          type: string
+ *          enum: ["AVAILABLE", "UN_AVAILABLE"]
+ *        category:
+ *          $ref: '#/components/schemas/Category'
+ *        createdAt:
+ *          type: string
+ *        updatedAt:
+ *          type: string
+ */

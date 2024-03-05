@@ -91,18 +91,15 @@ export const login = async (req, res) => {
   });
 
   return res.status(200).json({
-    result: "You login successfully",
+    result: "You logged in successfully",
     code: "SUCCESS",
-    user,
-    accessToken,
-    refreshToken,
-    type: "JWT",
+    data: { user, accessToken, refreshToken, type: "JWT" },
   });
 };
 
 /**
  * @swagger
- * /user/login:
+ * /users/auth/login:
  *    post:
  *      summary: Login
  *      requestBody:
@@ -113,7 +110,7 @@ export const login = async (req, res) => {
  *            schema:
  *              type: object
  *              properties:
- *                email:
+ *                username:
  *                  type: string
  *                password:
  *                  type: string
@@ -127,16 +124,19 @@ export const login = async (req, res) => {
  *                  schema:
  *                      type: object
  *                      properties:
- *                          resultMessage:
- *                              $ref: '#/components/schemas/ResultMessage'
- *                          resultCode:
+ *                          code:
  *                              $ref: '#/components/schemas/ResultCode'
- *                          user:
- *                              $ref: '#/components/schemas/User'
- *                          accessToken:
- *                              type: string
- *                          refreshToken:
- *                              type: string
+ *                          message:
+ *                              $ref: '#/components/schemas/ResultMessage'
+ *                          data:
+ *                              type: object
+ *                              properties:
+ *                                user:
+ *                                  $ref: '#/components/schemas/User'
+ *                                accessToken:
+ *                                  type: string
+ *                                refreshToken:
+ *                                  type: string
  *        "400":
  *          description: Please provide all the required fields!
  *          content:

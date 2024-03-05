@@ -111,3 +111,65 @@ export const progressOrder = async (req, res) => {
     });
   }, 500);
 };
+
+/**
+ * @swagger
+ * /orders/progress:
+ *    post:
+ *      summary: Send order to kitchen.
+ *      requestBody:
+ *        description: Order's information for the processing.
+ *        required: true
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                orderId:
+ *                  type: string
+ *                progressLineItems:
+ *                  type: array
+ *                  items:
+ *                    type: object
+ *                    properties:
+ *                      lineItemId:
+ *                        type: string
+ *                      quantity:
+ *                        type: number
+ *                      status:
+ *                        type: string
+ *      parameters:
+ *        - in: header
+ *          name: Authorization
+ *          schema:
+ *            type: string
+ *          description: Put access token here
+ *      tags:
+ *        - Order
+ *      responses:
+ *        "200":
+ *          description: Order processed successfully.
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      type: object
+ *                      properties:
+ *                          code:
+ *                              type: string
+ *                          message:
+ *                              type: string
+ *                          data:
+ *                              $ref: '#/components/schemas/Order'
+ *        "401":
+ *          description: Invalid token.
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      $ref: '#/components/schemas/Result'
+ *        "500":
+ *          description: An internal server error occurred, please try again.
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      $ref: '#/components/schemas/Result'
+ */

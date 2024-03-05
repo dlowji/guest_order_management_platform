@@ -78,12 +78,13 @@ export const register = async (req, res) => {
     });
   });
 
-  if (!existRole) return res.status(404).json({
-    error: {
-      message: "The role does not exist.",
-      code: "NOT_FOUND",
-    },
-  });
+  if (!existRole)
+    return res.status(404).json({
+      error: {
+        message: "The role does not exist.",
+        code: "NOT_FOUND",
+      },
+    });
 
   //hash password
   const hashedPassword = await hash(password, 10);
@@ -140,14 +141,14 @@ export const register = async (req, res) => {
         gender: employee.gender,
         birthDate: employee.birthDate.getDate(),
         roleName: role.name,
-      }
+      },
     },
   });
 };
 
 /**
  * @swagger
- * /user:
+ * /users/auth/register:
  *    post:
  *      summary: Registers the user
  *      requestBody:
@@ -158,21 +159,27 @@ export const register = async (req, res) => {
  *            schema:
  *              type: object
  *              properties:
- *                email:
+ *                username:
  *                  type: string
  *                password:
  *                  type: string
- *                name:
+ *                fullName:
  *                  type: string
- *                language:
+ *                email:
  *                  type: string
- *                  enum: ['tr', 'en']
- *                platform:
+ *                gender:
  *                  type: string
- *                  enum: ['Android', 'IOS']
- *                timezone:
+ *                  enum: ['Male', 'Female', 'Other']
+ *                salary:
  *                  type: number
- *                deviceId:
+ *                birthDate:
+ *                  type: string
+ *                address:
+ *                  type: string
+ *                roleName:
+ *                  type: string
+ *                  enum: ['Admin', 'Chef', 'Employee']
+ *                phone:
  *                  type: string
  *      tags:
  *        - User
@@ -184,14 +191,17 @@ export const register = async (req, res) => {
  *                  schema:
  *                      type: object
  *                      properties:
- *                          resultMessage:
+ *                          message:
  *                              $ref: '#/components/schemas/ResultMessage'
- *                          resultCode:
+ *                          code:
  *                              $ref: '#/components/schemas/ResultCode'
- *                          user:
- *                              $ref: '#/components/schemas/User'
- *                          confirmToken:
- *                              type: string
+ *                          data:
+ *                             type: object
+ *                             properties:
+ *                                username:
+ *                                  type: string
+ *                                employee:
+ *                                  $ref: '#/components/schemas/Employee'
  *        "400":
  *          description: Please provide all the required fields!
  *          content:

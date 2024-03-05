@@ -23,3 +23,25 @@ const severedTableSchema = new Schema({
 
 const SeveredTable = model("SeveredTable", severedTableSchema);
 export default SeveredTable;
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     SeveredTable:
+ *       type: object
+ *       properties:
+ *        _id:
+ *          type: string
+ *        code:
+ *          type: string
+ *        tableStatus:
+ *          type: string
+ *          enum: ["FREE", "CHECK_IN", "OCCUPIED"]
+ *        capacity:
+ *          type: number
+ *        createdAt:
+ *          type: string
+ *        updatedAt:
+ *          type: string
+ */
