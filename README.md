@@ -35,20 +35,20 @@ Besides, chefs can control dishes were ordered by guests, especially ensure the 
   - CSS3
   - JavaScript
   - React.js
-*Backend:
+* Backend:
   - Node.js
   - Express.js
   - MongoDB
-*Authentication:
+* Authentication:
   - JSON Web Tokens (JWT)
   Database:
   - MongoDB
-*Deployment:
+* Deployment:
   - Docker
-Version Control:
+* Version Control:
   - Git
   - GitHub
-*Other Tools:
+* Other Tools:
   - Axios (HTTP client)
   - Tailwind CSS (CSS framework)
   - Postman (API testing)
