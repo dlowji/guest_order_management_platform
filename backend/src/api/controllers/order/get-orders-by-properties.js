@@ -124,3 +124,64 @@ export const getOrdersByProperties = async (req, res) => {
     data: formattedOrders,
   });
 };
+
+/**
+ * @swagger
+ * /orders:
+ *    get:
+ *      summary: Get Orders By Properties.
+ *      parameters:
+ *        - in: query
+ *          name: userId
+ *          schema:
+ *            type: string
+ *            required: false
+ *          description: The ID of the user who made the order.
+ *        - in: query
+ *          name: statusQ
+ *          schema:
+ *            type: string
+ *            required: false
+ *          description: The status of the order.
+ *        - in: query
+ *          name: tableId
+ *          schema:
+ *            type: string
+ *            required: false
+ *          description: The ID of the table where the order was made.
+ *        - in: header
+ *          name: Authorization
+ *          schema:
+ *            type: string
+ *          description: Put access token here
+ *      tags:
+ *        - Order
+ *      responses:
+ *        "200":
+ *          description: Order retrieved by properties successfully.
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      type: object
+ *                      properties:
+ *                          code:
+ *                              type: string
+ *                          message:
+ *                              type: string
+ *                          data:
+ *                              type: array
+ *                              items:
+ *                                $ref: '#/components/schemas/Order'
+ *        "401":
+ *          description: Invalid token.
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      $ref: '#/components/schemas/Result'
+ *        "500":
+ *          description: An internal server error occurred, please try again.
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      $ref: '#/components/schemas/Result'
+ */

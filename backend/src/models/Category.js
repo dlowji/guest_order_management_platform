@@ -27,3 +27,24 @@ const categorySchema = new Schema(
 
 const Category = model("Category", categorySchema);
 export default Category;
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Category:
+ *       type: object
+ *       properties:
+ *        _id:
+ *          type: string
+ *        name:
+ *          type: string
+ *        icon:
+ *          type: string
+ *        link:
+ *          type: string
+ *        createdAt:
+ *          type: string
+ *        updatedAt:
+ *          type: string
+ */

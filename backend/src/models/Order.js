@@ -90,3 +90,45 @@ orderSchema.pre("findOneAndUpdate", async function (next) {
 
 const Order = model("Order", orderSchema);
 export default Order;
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Order:
+ *       type: object
+ *       properties:
+ *         _id:
+ *           type: string
+ *         user:
+ *           $ref: '#/components/schemas/User'
+ *         table:
+ *           $ref: '#/components/schemas/SeveredTable'
+ *         lineItems:
+ *           type: array
+ *           items:
+ *             $ref: '#/components/schemas/LineItem'
+ *         status:
+ *           type: string
+ *           enum: ["CREATED", "IN_PROCESSING", "CANCELED", "COMPLETED"]
+ *         lastProcessing:
+ *           type: string
+ *         subTotal:
+ *           type: number
+ *         itemDiscount:
+ *           type: number
+ *         tax:
+ *           type: number
+ *         total:
+ *           type: number
+ *         promoCode:
+ *           type: string
+ *         discount:
+ *           type: number
+ *         grandTotal:
+ *           type: number
+ *         createdAt:
+ *           type: string
+ *         updatedAt:
+ *           type: string
+ */

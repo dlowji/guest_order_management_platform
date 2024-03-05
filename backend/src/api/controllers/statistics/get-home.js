@@ -55,3 +55,53 @@ export const getHome = async (req, res) => {
     data,
   });
 };
+
+/**
+ * @swagger
+ * /statistics/home:
+ *    get:
+ *      summary: Get home statistics.
+ *      parameters:
+ *        - in: header
+ *          name: Authorization
+ *          schema:
+ *            type: string
+ *          description: Put access token here
+ *      tags:
+ *        - Statistics
+ *      responses:
+ *        "200":
+ *          description: Home statistics retrieved successfully.
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      type: object
+ *                      properties:
+ *                          code:
+ *                              type: string
+ *                          message:
+ *                              type: string
+ *                          data:
+ *                              type: object
+ *                              properties:
+ *                                 revenue:
+ *                                   type: number
+ *                                 totalOrders:
+ *                                   type: number
+ *                                 diningOrders:
+ *                                   type: number
+ *                                 freeTables:
+ *                                   type: number
+ *        "401":
+ *          description: Invalid token.
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      $ref: '#/components/schemas/Result'
+ *        "500":
+ *          description: An internal server error occurred, please try again.
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      $ref: '#/components/schemas/Result'
+ */

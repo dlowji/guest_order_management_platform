@@ -24,7 +24,7 @@ export const getUser = async (req, res) => {
   });
 
   if (!employee)
-    return res.status(404).json({
+    return res.status(401).json({
       error: {
         message: "Employee not found.",
         code: "EMPLOYEE_NOT_FOUND",
@@ -42,7 +42,7 @@ export const getUser = async (req, res) => {
   });
 
   if (!role)
-    return res.status(404).json({
+    return res.status(401).json({
       error: {
         message: "Role not found.",
         code: "ROLE_NOT_FOUND",
@@ -51,13 +51,14 @@ export const getUser = async (req, res) => {
 
   return res.status(200).json({
     code: "SUCCESS",
+    message: "The user information has gotten successfully.",
     data: { ...user._doc, roleName: role.name },
   });
 };
 
 /**
  * @swagger
- * /user:
+ * /users/me:
  *    get:
  *      summary: Get User Info
  *      parameters:
@@ -76,11 +77,11 @@ export const getUser = async (req, res) => {
  *                  schema:
  *                      type: object
  *                      properties:
- *                          resultMessage:
- *                              $ref: '#/components/schemas/ResultMessage'
- *                          resultCode:
- *                              $ref: '#/components/schemas/ResultCode'
- *                          user:
+ *                          code:
+ *                              type: string
+ *                          message:
+ *                              type: string
+ *                          data:
  *                              $ref: '#/components/schemas/User'
  *        "401":
  *          description: Invalid token.

@@ -46,3 +46,35 @@ const employeeSchema = new Schema(
 
 const Employee = model("Employee", employeeSchema);
 export default Employee;
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Employee:
+ *       type: object
+ *       properties:
+ *        _id:
+ *          type: string
+ *        fullName:
+ *          type: string
+ *        email:
+ *          type: string
+ *        salary:
+ *          type: number
+ *        phone:
+ *          type: string
+ *        address:
+ *          type: string
+ *        gender:
+ *          type: string
+ *          enum: ["Male", "Female", "Other"]
+ *        birthDate:
+ *          type: string
+ *        role:
+ *          $ref: '#/components/schemas/Role'
+ *        createdAt:
+ *          type: string
+ *        updatedAt:
+ *          type: string
+ */

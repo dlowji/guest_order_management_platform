@@ -38,7 +38,6 @@ export const getDishesByProperties = async (req, res) => {
       },
     });
   });
-  console.log(dishes);
   return res.status(200).json({
     message: "Dishes retrieved successfully",
     code: "SUCCESS",
@@ -46,3 +45,64 @@ export const getDishesByProperties = async (req, res) => {
     data: dishes,
   });
 };
+
+/**
+ * @swagger
+ * /kitchen/dishes:
+ *    get:
+ *      summary: Get Dish By Properties.
+ *      parameters:
+ *        - in: query
+ *          name: categoryQ
+ *          schema:
+ *            type: string
+ *            required: false
+ *          description: The category name
+ *        - in: query
+ *          name: statusQ
+ *          schema:
+ *            type: string
+ *            required: false
+ *          description: The status of the dish
+ *        - in: header
+ *          name: Authorization
+ *          schema:
+ *            type: string
+ *          description: Put access token here
+ *      tags:
+ *        - Kitchen
+ *      responses:
+ *        "200":
+ *          description: Dish retrieved successfully.
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      type: object
+ *                      properties:
+ *                          code:
+ *                              type: string
+ *                          message:
+ *                              type: string
+ *                          filter:
+ *                              type: object
+ *                              properties:
+ *                                category:
+ *                                  type: string
+ *                                status:
+ *                                  type: string
+ *                          data:
+ *                              type: array
+ *                              $ref: '#/components/schemas/Dish'
+ *        "401":
+ *          description: Invalid token.
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      $ref: '#/components/schemas/Result'
+ *        "500":
+ *          description: An internal server error occurred, please try again.
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      $ref: '#/components/schemas/Result'
+ */

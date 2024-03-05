@@ -70,3 +70,54 @@ export const checkOutOrder = async (req, res) => {
     });
   }, 500);
 };
+
+/**
+ * @swagger
+ * /orders/check-out:
+ *    post:
+ *      summary: Check out order.
+ *      requestBody:
+ *        description: ID of the order to be checked out.
+ *        required: true
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                orderId:
+ *                  type: string
+ *      parameters:
+ *        - in: header
+ *          name: Authorization
+ *          schema:
+ *            type: string
+ *          description: Put access token here
+ *      tags:
+ *        - History
+ *      responses:
+ *        "200":
+ *          description: Order checked out successfully.
+ *          content:
+ *              application/json:
+ *                schema:
+ *                  type: object
+ *                  properties:
+ *                    code:
+ *                      type: string
+ *                    message:
+ *                      type: string
+ *                    data:
+ *                      $ref: '#/components/schemas/Order'
+ *        "401":
+ *          description: Invalid token.
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      $ref: '#/components/schemas/Result'
+ *        "500":
+ *          description: An internal server error occurred, please try again.
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      $ref: '#/components/schemas/Result'
+ */

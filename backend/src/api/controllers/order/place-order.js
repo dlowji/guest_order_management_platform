@@ -295,3 +295,67 @@ export const placeOrder = async (req, res) => {
     });
   }, 500);
 };
+
+/**
+ * @swagger
+ * /orders/placed:
+ *    post:
+ *      summary: Place order.
+ *      requestBody:
+ *        description: Order's information for the update.
+ *        required: true
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                orderId:
+ *                  type: string
+ *                orderedLineItems:
+ *                  type: array
+ *                  items:
+ *                    type: object
+ *                    properties:
+ *                      lineItemId:
+ *                        type: string
+ *                      dishId:
+ *                        type: string
+ *                      quantity:
+ *                        type: number
+ *                      note:
+ *                        type: string
+ *      parameters:
+ *        - in: header
+ *          name: Authorization
+ *          schema:
+ *            type: string
+ *          description: Put access token here
+ *      tags:
+ *        - Order
+ *      responses:
+ *        "200":
+ *          description: Order updated successfully.
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      type: object
+ *                      properties:
+ *                          code:
+ *                              type: string
+ *                          message:
+ *                              type: string
+ *                          data:
+ *                              $ref: '#/components/schemas/Order'
+ *        "401":
+ *          description: Invalid token.
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      $ref: '#/components/schemas/Result'
+ *        "500":
+ *          description: An internal server error occurred, please try again.
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      $ref: '#/components/schemas/Result'
+ */

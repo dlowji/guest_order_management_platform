@@ -80,3 +80,62 @@ export const createDish = async (req, res) => {
     data: dish,
   });
 };
+
+/**
+ * @swagger
+ * /kitchen/dishes/create:
+ *    post:
+ *      summary: Create new dish
+ *      requestBody:
+ *        description: Category's information for the creation.
+ *        required: true
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                title:
+ *                  type: string
+ *                image:
+ *                  type: string
+ *                price:
+ *                  type: number
+ *                summary:
+ *                  type: string
+ *                categoryName:
+ *                  type: string
+ *      parameters:
+ *        - in: header
+ *          name: Authorization
+ *          schema:
+ *            type: string
+ *          description: Put access token here
+ *      tags:
+ *        - Kitchen
+ *      responses:
+ *        "200":
+ *          description: Dish created successfully.
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      type: object
+ *                      properties:
+ *                          code:
+ *                              type: string
+ *                          message:
+ *                              type: string
+ *                          data:
+ *                              $ref: '#/components/schemas/Dish'
+ *        "401":
+ *          description: Invalid token.
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      $ref: '#/components/schemas/Result'
+ *        "500":
+ *          description: An internal server error occurred, please try again.
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      $ref: '#/components/schemas/Result'
+ */

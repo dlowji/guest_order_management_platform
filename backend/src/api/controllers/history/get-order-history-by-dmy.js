@@ -71,3 +71,58 @@ export const getOrderHistoryByDmy = async (req, res) => {
     data: formattedOrders,
   });
 };
+
+/**
+ * @swagger
+ * /history/:filter/:timestamp:
+ *    get:
+ *      summary: Get order history by day, month, or year.
+ *      parameters:
+ *        - in: path
+ *          name: timestamp
+ *          schema:
+ *            type: number
+ *            required: true
+ *          description: The timestamp of the date.
+ *        - in: path
+ *          name: filter
+ *          schema:
+ *            type: string
+ *            required: true
+ *          description: The filter to use (day, month, year).
+ *        - in: header
+ *          name: Authorization
+ *          schema:
+ *            type: string
+ *          description: Put access token here
+ *      tags:
+ *        - History
+ *      responses:
+ *        "200":
+ *          description: Order history retrieved by day, month, or year successfully.
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      type: object
+ *                      properties:
+ *                        code:
+ *                          type: string
+ *                        message:
+ *                          type: string
+ *                        data:
+ *                          type: array
+ *                          items:
+ *                            $ref: '#/components/schemas/Order'
+ *        "401":
+ *          description: Invalid token.
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      $ref: '#/components/schemas/Result'
+ *        "500":
+ *          description: An internal server error occurred, please try again.
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      $ref: '#/components/schemas/Result'
+ */
